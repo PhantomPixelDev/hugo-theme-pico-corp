@@ -1,0 +1,12 @@
+{{- /* {{< figure src="images/foo.jpg" alt="…" caption="…" >}} */ -}}
+{{- $src := .Get "src" -}}
+{{- with $src -}}
+<figure>
+  {{ partial "utils/image.html" (dict
+    "page" $.Page
+    "path" .
+    "alt" ($.Get "alt" | default "")
+    "sizes" ($.Get "sizes" | default "(min-width: 46rem) 40rem, 100vw")) }}
+  {{ with $.Get "caption" }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+</figure>
+{{- end -}}

@@ -1,0 +1,10 @@
+{{- /* Builds the class attribute value for a section wrapper from its config:
+       tone ("muted" | "inverse"), tight (bool) and any extra classes. */ -}}
+{{- $classes := slice "section" -}}
+{{- with .tone -}}
+  {{- if eq . "muted" }}{{ $classes = $classes | append "section--muted" }}{{ end -}}
+  {{- if eq . "inverse" }}{{ $classes = $classes | append "section--inverse" }}{{ end -}}
+{{- end -}}
+{{- if .tight }}{{ $classes = $classes | append "section--tight" }}{{ end -}}
+{{- with .class }}{{ $classes = $classes | append . }}{{ end -}}
+{{- return delimit $classes " " -}}

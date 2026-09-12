@@ -1,0 +1,24 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  <section class="section">
+    <div class="container stack-lg">
+      {{ with .Content }}<div class="prose prose--wide">{{ . }}</div>{{ end }}
+
+      {{ $pages := .RegularPages }}
+      <div class="grid-auto grid-auto--wide grid-auto--gap-lg">
+        {{ range $i, $p := $pages }}
+          {{ $featured := and (eq $i 0) $p.Params.featured }}
+          {{ partial "cards/project-card.html" (dict
+            "page" $p
+            "featured" $featured
+            "headingLevel" "h2"
+            "sizes" (cond $featured "(min-width: 56rem) 55vw, 100vw" "(min-width: 56rem) 33vw, 100vw")) }}
+        {{ end }}
+      </div>
+    </div>
+  </section>
+
+  {{ partial "utils/sections.html" . }}
+  {{ partial "cta.html" . }}
+{{ end }}

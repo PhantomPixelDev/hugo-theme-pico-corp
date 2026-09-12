@@ -1,0 +1,29 @@
+{{- /* FAQ built on native <details>, so it works without JavaScript.
+
+  cfg: eyebrow, title, lead, tone, limit, group (filter by data entry group),
+       data (default "faq"). Each entry: { question, answer, group } */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "faq")) -}}
+{{- with $cfg.group -}}
+  {{- $items = where $items "group" . -}}
+{{- end -}}
+{{- with $cfg.limit }}{{ $items = first . $items }}{{ end -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+      <div class="faq">
+        {{ range . }}
+          <details class="faq__item">
+            <summary>{{ .question }}</summary>
+            <div class="faq__answer">{{ .answer | markdownify }}</div>
+          </details>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+{{- end -}}

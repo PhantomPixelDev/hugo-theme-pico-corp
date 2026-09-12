@@ -1,0 +1,13 @@
+{{- /* The header call to action. Set params.navCta.label and params.navCta.url
+       to override, or params.navCta.enabled = false to hide it. Falls back to
+       the site-wide CTA target. Returns an empty string when disabled. */ -}}
+
+{{- $cta := site.Params.navCta | default dict -}}
+{{- $url := $cta.url | default site.Params.cta.primaryURL -}}
+{{- $out := "" -}}
+
+{{- if and $url (ne $cta.enabled false) -}}
+  {{- $out = dict "label" ($cta.label | default (i18n "startProject")) "url" $url -}}
+{{- end -}}
+
+{{- return $out -}}

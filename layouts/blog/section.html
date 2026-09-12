@@ -1,0 +1,32 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  {{ $pages := .RegularPages }}
+  {{ $paginator := .Paginate $pages }}
+
+  <section class="section">
+    <div class="container">
+      {{ with site.Taxonomies.categories }}
+        <nav class="filter-bar" aria-label="{{ i18n "filterByCategory" }}">
+          <a class="filter-bar__link" href="{{ $.RelPermalink }}" aria-current="page">{{ i18n "allPosts" }}</a>
+          {{ range $name, $taxonomy := . }}
+            {{ with site.GetPage (printf "/categories/%s" $name) }}
+              <a class="filter-bar__link" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+            {{ end }}
+          {{ end }}
+          <span class="listing-count">{{ i18n "postCount" (len $pages) }}</span>
+        </nav>
+      {{ end }}
+
+      <div class="grid-auto grid-auto--gap-lg">
+        {{ range $paginator.Pages }}
+          {{ partial "cards/post-card.html" (dict "page" . "headingLevel" "h2") }}
+        {{ end }}
+      </div>
+
+      {{ partial "pagination.html" . }}
+    </div>
+  </section>
+
+  {{ partial "cta.html" . }}
+{{ end }}

@@ -1,0 +1,87 @@
+{{- /*
+  Contact form.
+
+  The theme ships no backend. Point params.contactForm.action at a form
+  service — Formspree, Netlify Forms, Basin, your own handler — and the form
+  starts working with no template changes. Until then the fields render but stay
+  disabled, so the page never pretends to send anything.
+
+  params.contactForm:
+    action          endpoint URL (empty = demo mode)
+    method          POST by default
+    netlify         true adds data-netlify and the honeypot Netlify expects
+    successMessage  shown under the form as guidance for the configured service
+*/ -}}
+{{- $form := site.Params.contactForm | default dict -}}
+{{- $action := $form.action | default "" -}}
+{{- $live := ne $action "" -}}
+{{- $budgets := site.Params.contactBudgets | default (slice "Under €25k" "€25k – €60k" "€60k – €120k" "Above €120k" "Not sure yet") -}}
+
+<form
+  class="stack"
+  {{ if $live }}action="{{ $action }}" method="{{ $form.method | default "POST" }}"{{ end }}
+  {{ if $form.netlify }}data-netlify="true" netlify-honeypot="bot-field"{{ end }}>
+
+  {{ if not $live }}
+    <div class="form-note">
+      <p>
+        <strong>{{ i18n "demoFormTitle" }}</strong><br />
+        {{ i18n "demoFormText" }}
+        {{ with site.Params.email }}
+          <a href="mailto:{{ . }}">{{ . }}</a>.
+        {{ end }}
+      </p>
+    </div>
+  {{ end }}
+
+  <fieldset {{ if not $live }}disabled{{ end }}>
+    {{ if $form.netlify }}
+      <p hidden><label>{{ i18n "leaveEmpty" }}<input name="bot-field" /></label></p>
+    {{ end }}
+
+    <div class="form-grid form-grid--two">
+      <div class="form-field form-field--required">
+        <label for="contact-name">{{ i18n "formName" }}</label>
+        <input type="text" id="contact-name" name="name" autocomplete="name" required />
+      </div>
+
+      <div class="form-field form-field--required">
+        <label for="contact-email">{{ i18n "formEmail" }}</label>
+        <input type="email" id="contact-email" name="email" autocomplete="email" required />
+      </div>
+
+      <div class="form-field">
+        <label for="contact-company">{{ i18n "formCompany" }}</label>
+        <input type="text" id="contact-company" name="company" autocomplete="organization" />
+      </div>
+
+      <div class="form-field">
+        <label for="contact-budget">{{ i18n "formBudget" }}</label>
+        <select id="contact-budget" name="budget">
+          <option value="">{{ i18n "formChoose" }}</option>
+          {{ range $budgets }}<option value="{{ . }}">{{ . }}</option>{{ end }}
+        </select>
+      </div>
+
+      <div class="form-field form-field--required form-grid__full">
+        <label for="contact-message">{{ i18n "formMessage" }}</label>
+        <textarea id="contact-message" name="message" rows="6" required
+          aria-describedby="contact-message-hint"></textarea>
+        <span class="form-field__hint" id="contact-message-hint">{{ i18n "formMessageHint" }}</span>
+      </div>
+
+      <div class="form-grid__full">
+        <label class="form-consent">
+          <input type="checkbox" name="consent" value="yes" required />
+          <span>{{ i18n "formConsent" }}</span>
+        </label>
+      </div>
+    </div>
+
+    <button class="button button--primary button--lg" type="submit">{{ i18n "formSubmit" }}</button>
+
+    {{ with $form.successMessage }}
+      <p class="muted"><small>{{ . }}</small></p>
+    {{ end }}
+  </fieldset>
+</form>

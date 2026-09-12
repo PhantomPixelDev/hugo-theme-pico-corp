@@ -1,0 +1,37 @@
+<header class="site-header" data-site-header>
+  <div class="container site-header__inner">
+    <a class="brand" href="{{ site.Home.RelPermalink }}">
+      {{- with site.Params.logo -}}
+        {{- $logo := partial "utils/resolve-image.html" (dict "path" .) -}}
+        {{- with $logo -}}
+          <img class="brand__logo" src="{{ .RelPermalink }}" alt="{{ site.Params.companyName | default site.Title }}"
+            {{ with .Width }}width="{{ . }}"{{ end }}{{ with .Height }} height="{{ . }}"{{ end }} />
+        {{- else -}}
+          <img class="brand__logo" src="{{ . | relURL }}" alt="{{ site.Params.companyName | default site.Title }}" />
+        {{- end -}}
+      {{- else -}}
+        <span class="brand__mark" aria-hidden="true">{{ partial "utils/icon.html" "star" }}</span>
+        <span>{{ site.Params.companyName | default site.Title }}</span>
+      {{- end -}}
+    </a>
+
+    {{ partial "nav.html" . }}
+
+    <div class="site-header__actions">
+      {{ if site.Params.showSchemeToggle | default true }}
+        {{ partial "scheme-toggle.html" . }}
+      {{ end }}
+      <button
+        class="icon-button nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="{{ i18n "menu" }}"
+        data-nav-toggle>
+        <span class="nav-toggle__bars" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  {{ partial "nav-mobile.html" . }}
+</header>

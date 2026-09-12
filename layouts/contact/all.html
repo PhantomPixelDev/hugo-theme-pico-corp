@@ -1,0 +1,47 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  <section class="section">
+    <div class="container split split--aside">
+      <div class="stack-lg">
+        {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+        {{ partial "contact-form.html" . }}
+      </div>
+
+      <div class="contact-card">
+        <h2>{{ i18n "contactDetails" }}</h2>
+        <dl class="contact-info">
+          {{ with site.Params.email }}
+            <dt>{{ i18n "email" }}</dt>
+            <dd><a href="mailto:{{ . }}">{{ . }}</a></dd>
+          {{ end }}
+          {{ with site.Params.phone }}
+            <dt>{{ i18n "phone" }}</dt>
+            <dd><a href="tel:{{ site.Params.phoneHref | default . }}">{{ . }}</a></dd>
+          {{ end }}
+          {{ with site.Params.address }}
+            <dt>{{ i18n "studio" }}</dt>
+            <dd>
+              {{ with .street }}{{ . }}<br />{{ end }}
+              {{ with .postalCode }}{{ . }} {{ end }}{{ with .city }}{{ . }}<br />{{ end }}
+              {{ with .country }}{{ . }}{{ end }}
+              {{ with .mapURL }}
+                <br /><a href="{{ . }}" rel="noopener">{{ i18n "openInMaps" }}</a>
+              {{ end }}
+            </dd>
+          {{ end }}
+          {{ with site.Params.openingHours }}
+            <dt>{{ i18n "openingHours" }}</dt>
+            <dd>{{ . }}</dd>
+          {{ end }}
+          {{ with site.Params.vatId }}
+            <dt>{{ i18n "vatId" }}</dt>
+            <dd>{{ . }}</dd>
+          {{ end }}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  {{ partial "utils/sections.html" . }}
+{{ end }}

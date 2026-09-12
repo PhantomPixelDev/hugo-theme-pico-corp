@@ -1,0 +1,47 @@
+{{- /* Company / about block with optional image and bullet list.
+
+  cfg: eyebrow, title, lead, body, image, imageAlt, tone, reverse,
+       points (slice of { title, text }), link { label, url } */ -}}
+{{- $cfg := .cfg -}}
+{{- $page := .page -}}
+<section class="{{ partial "utils/section-class.html" $cfg }}">
+  <div class="container split split--aside">
+    <div>
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead) }}
+
+      {{ with $cfg.body }}
+        <div class="prose prose--wide">{{ . | markdownify }}</div>
+      {{ end }}
+
+      {{ with $cfg.points }}
+        <ul class="benefit-list">
+          {{ range . }}
+            <li>
+              <span class="benefit-list__title">{{ .title }}</span>
+              <span class="benefit-list__text">{{ .text }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      {{ end }}
+
+      {{ with $cfg.link }}
+        <p class="section-footer">
+          <a class="link-arrow" href="{{ .url }}">{{ .label }}</a>
+        </p>
+      {{ end }}
+    </div>
+
+    {{ with $cfg.image }}
+      <div class="hero__media">
+        {{ partial "utils/image.html" (dict
+          "page" $page
+          "path" .
+          "alt" ($cfg.imageAlt | default "")
+          "sizes" "(min-width: 62rem) 40vw, 100vw") }}
+      </div>
+    {{ end }}
+  </div>
+</section>

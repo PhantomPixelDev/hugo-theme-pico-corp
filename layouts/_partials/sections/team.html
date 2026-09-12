@@ -1,0 +1,20 @@
+{{- /* Team grid. cfg: eyebrow, title, lead, tone, limit, data (default "team"). */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "team")) -}}
+{{- with $cfg.limit }}{{ $items = first . $items }}{{ end -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+      <div class="grid-auto grid-auto--narrow grid-auto--gap-lg">
+        {{ range . }}
+          {{ partial "cards/team-card.html" . }}
+        {{ end }}
+      </div>
+    </div>
+  </section>
+{{- end -}}

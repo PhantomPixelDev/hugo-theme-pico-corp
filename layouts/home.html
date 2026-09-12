@@ -1,0 +1,13 @@
+{{ define "main" }}
+  {{ partial "utils/sections.html" . }}
+
+  {{ if not .Params.sections }}
+    {{- /* A home page with no composed sections still renders its content. */ -}}
+    <section class="section">
+      <div class="container">
+        <h1>{{ .Title }}</h1>
+        <div class="prose">{{ .Content }}</div>
+      </div>
+    </section>
+  {{ end }}
+{{ end }}

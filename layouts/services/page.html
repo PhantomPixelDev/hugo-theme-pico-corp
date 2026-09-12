@@ -1,0 +1,96 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  <section class="section">
+    <div class="container split split--aside split--sticky">
+      <div class="stack-lg">
+        {{ with .Content }}<div class="prose prose--wide">{{ . }}</div>{{ end }}
+
+        {{ with .Params.benefits }}
+          <div>
+            <h2>{{ i18n "whatYouGet" }}</h2>
+            <ul class="benefit-list">
+              {{ range . }}
+                <li>
+                  <span class="benefit-list__title">{{ .title }}</span>
+                  <span class="benefit-list__text">{{ .text }}</span>
+                </li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
+
+        {{ with .Params.process }}
+          <div>
+            <h2>{{ i18n "howWeWork" }}</h2>
+            <ol class="process">
+              {{ range . }}
+                <li class="process__step">
+                  <h3 class="process__title">{{ .title }}</h3>
+                  <p class="process__text">{{ .text }}</p>
+                  {{ with .duration }}<span class="process__duration">{{ . }}</span>{{ end }}
+                </li>
+              {{ end }}
+            </ol>
+          </div>
+        {{ end }}
+
+        {{ with .Params.deliverables }}
+          <div>
+            <h2>{{ i18n "deliverables" }}</h2>
+            <ul class="deliverables">
+              {{ range . }}<li>{{ . }}</li>{{ end }}
+            </ul>
+          </div>
+        {{ end }}
+      </div>
+
+      <aside class="case-sidebar">
+        {{ with .Params.engagement }}
+          <h2 class="case-sidebar__heading">{{ i18n "engagement" }}</h2>
+          <p>{{ . }}</p>
+        {{ end }}
+        {{ with .Params.timeline }}
+          <h2 class="case-sidebar__heading">{{ i18n "typicalTimeline" }}</h2>
+          <p>{{ . }}</p>
+        {{ end }}
+        {{ with .Params.stack }}
+          <h2 class="case-sidebar__heading">{{ i18n "toolsWeUse" }}</h2>
+          <ul class="tag-list">
+            {{ range . }}<li><span class="badge">{{ . }}</span></li>{{ end }}
+          </ul>
+        {{ end }}
+
+        {{ $related := where (where .CurrentSection.RegularPages "Permalink" "!=" .Permalink) "Params.hidden" "!=" true }}
+        {{ with first 4 $related }}
+          <h2 class="case-sidebar__heading">{{ i18n "otherServices" }}</h2>
+          <ul class="site-footer__list">
+            {{ range . }}<li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>{{ end }}
+          </ul>
+        {{ end }}
+      </aside>
+    </div>
+  </section>
+
+  {{ with .Params.relatedWork }}
+    {{ $pages := slice }}
+    {{ range . }}
+      {{ with site.GetPage . }}{{ $pages = $pages | append . }}{{ end }}
+    {{ end }}
+    {{ with $pages }}
+      <section class="section section--muted">
+        <div class="container">
+          {{ partial "utils/section-head.html" (dict
+            "eyebrow" (i18n "caseStudies")
+            "title" (i18n "relatedWork")) }}
+          <div class="grid-auto grid-auto--wide grid-auto--gap-lg">
+            {{ range . }}{{ partial "cards/project-card.html" . }}{{ end }}
+          </div>
+        </div>
+      </section>
+    {{ end }}
+  {{ end }}
+
+  {{ partial "utils/sections.html" . }}
+  {{ partial "cta.html" . }}
+{{ end }}

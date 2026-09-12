@@ -1,0 +1,17 @@
+{{- with site.Params.social -}}
+  {{- $known := slice "linkedin" "github" "mastodon" "rss" "x" "instagram" "dribbble" "mail" -}}
+  <ul class="social-links">
+    {{ range . }}
+      {{ $icon := lower (.icon | default (lower .name)) }}
+      {{ if not (in $known $icon) }}{{ $icon = "external" }}{{ end }}
+      <li>
+        <a href="{{ .url }}"
+          {{ if hasPrefix .url "http" }}rel="me noopener"{{ end }}
+          aria-label="{{ .name }}"
+          title="{{ .name }}">
+          {{ partial "utils/icon.html" $icon }}
+        </a>
+      </li>
+    {{ end }}
+  </ul>
+{{- end -}}

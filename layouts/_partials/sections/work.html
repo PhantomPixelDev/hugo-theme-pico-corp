@@ -1,0 +1,40 @@
+{{- /* Featured case studies.
+
+  cfg: eyebrow, title, lead, tone, limit, featuredOnly, feature (bool — render
+       the first card full width), link { label, url } */ -}}
+{{- $cfg := .cfg -}}
+{{- $section := site.GetPage (printf "/%s" ($cfg.section | default "work")) -}}
+{{- with $section -}}
+  {{- $pages := .RegularPages -}}
+  {{- if $cfg.featuredOnly -}}
+    {{- $pages = where $pages "Params.featured" true -}}
+  {{- end -}}
+  {{- with $cfg.limit }}{{ $pages = first . $pages }}{{ end -}}
+  {{- with $pages -}}
+    <section class="{{ partial "utils/section-class.html" $cfg }}">
+      <div class="container">
+        {{ partial "utils/section-head.html" (dict
+          "eyebrow" $cfg.eyebrow
+          "title" ($cfg.title | default $section.LinkTitle)
+          "lead" $cfg.lead
+          "center" $cfg.center) }}
+
+        <div class="grid-auto grid-auto--wide grid-auto--gap-lg">
+          {{ range $i, $p := . }}
+            {{ $featured := and $cfg.feature (eq $i 0) }}
+            {{ partial "cards/project-card.html" (dict
+              "page" $p
+              "featured" $featured
+              "sizes" (cond $featured "(min-width: 56rem) 55vw, 100vw" "(min-width: 56rem) 33vw, 100vw")) }}
+          {{ end }}
+        </div>
+
+        {{ with $cfg.link }}
+          <p class="section-footer">
+            <a class="link-arrow" href="{{ .url }}">{{ .label }}</a>
+          </p>
+        {{ end }}
+      </div>
+    </section>
+  {{- end -}}
+{{- end -}}

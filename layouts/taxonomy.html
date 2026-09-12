@@ -1,0 +1,25 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  <section class="section">
+    <div class="container">
+      {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+
+      {{ with .Pages }}
+        <ul class="tag-list">
+          {{ range .ByTitle }}
+            <li>
+              <a href="{{ .RelPermalink }}">
+                <span class="badge">{{ .LinkTitle }} <span class="muted">{{ len .Pages }}</span></span>
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="muted">{{ i18n "nothingHere" }}</p>
+      {{ end }}
+    </div>
+  </section>
+
+  {{ partial "cta.html" . }}
+{{ end }}

@@ -1,0 +1,53 @@
+{{- /* Hero.
+
+  cfg keys: eyebrow, title, lead, image, imageAlt, centered,
+            primary { label, url }, secondary { label, url },
+            note, facts (slice of { value, label }) */ -}}
+{{- $cfg := .cfg -}}
+{{- $page := .page -}}
+<section class="hero{{ if $cfg.centered }} hero--centered{{ end }}">
+  <div class="container hero__inner">
+    <div>
+      {{ with $cfg.eyebrow }}<span class="eyebrow">{{ . }}</span>{{ end }}
+      <h1 class="hero__title">{{ $cfg.title | default $page.Title }}</h1>
+      {{ with $cfg.lead }}<p class="hero__lead">{{ . | markdownify }}</p>{{ end }}
+
+      <div class="button-group">
+        {{ with $cfg.primary }}
+          <a class="button button--primary button--lg" href="{{ .url }}">{{ .label }}</a>
+        {{ end }}
+        {{ with $cfg.secondary }}
+          <a class="button button--secondary button--lg" href="{{ .url }}">{{ .label }}</a>
+        {{ end }}
+      </div>
+
+      {{ with $cfg.note }}
+        <p class="hero__note">{{ . | markdownify }}</p>
+      {{ end }}
+
+      {{ with $cfg.facts }}
+        <ul class="hero__facts stats">
+          {{ range . }}
+            <li class="stat">
+              <span class="stat__value">{{ .value }}</span>
+              <span class="stat__label">{{ .label }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      {{ end }}
+    </div>
+
+    {{ with $cfg.image }}
+      <div class="hero__aside">
+        <div class="hero__media">
+          {{ partial "utils/image.html" (dict
+            "page" $page
+            "path" .
+            "alt" ($cfg.imageAlt | default "")
+            "sizes" "(min-width: 62rem) 46vw, 100vw"
+            "priority" true) }}
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</section>

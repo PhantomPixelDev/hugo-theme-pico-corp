@@ -1,0 +1,8 @@
+{{- /* {{< faq group="pricing" >}} — renders FAQ entries from data/faq.yaml. */ -}}
+{{ partial "sections/faq.html" (dict
+  "page" .Page
+  "cfg" (dict
+    "group" (.Get "group")
+    "title" (.Get "title")
+    "tone" (.Get "tone")
+    "tight" true)) }}

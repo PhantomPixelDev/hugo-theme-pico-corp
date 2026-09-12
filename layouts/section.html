@@ -1,0 +1,30 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  {{ if .Params.sections }}
+    {{ partial "utils/sections.html" . }}
+  {{ else }}
+    <section class="section">
+      <div class="container">
+        {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+
+        {{ with .RegularPages }}
+          <div class="grid-auto grid-auto--wide grid-auto--gap-lg">
+            {{ range . }}
+              <article class="card">
+                <h2 class="service-card__title">
+                  <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+                </h2>
+                {{ with or .Params.summary .Description }}
+                  <p class="service-card__text">{{ . }}</p>
+                {{ end }}
+              </article>
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+    </section>
+  {{ end }}
+
+  {{ partial "cta.html" . }}
+{{ end }}

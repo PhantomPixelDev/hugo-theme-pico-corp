@@ -1,0 +1,422 @@
+/* ==========================================================================
+   Sections
+   Hero, page headers, process, timeline, values, pricing and the CTA band.
+   ========================================================================== */
+
+/* ---- Hero -------------------------------------------------------------- */
+
+.hero {
+  padding-block: clamp(2.25rem, 4vw, 4rem) clamp(3rem, 6vw, 6rem);
+}
+
+.hero__inner {
+  display: grid;
+  gap: var(--pc-space-xl);
+  align-items: center;
+}
+
+@media (min-width: 62rem) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: var(--pc-space-2xl);
+  }
+
+  .hero--centered .hero__inner {
+    grid-template-columns: 1fr;
+    max-width: var(--pc-container-narrow);
+    margin-inline: auto;
+    text-align: center;
+  }
+}
+
+.hero__title {
+  font-size: var(--pc-text-4xl);
+  margin-block-end: var(--pc-space-md);
+}
+
+.hero__lead {
+  font-size: var(--pc-text-lg);
+  line-height: var(--pc-leading-normal);
+  letter-spacing: var(--pc-tracking-snug);
+  color: var(--pc-text-soft);
+  max-width: 40ch;
+  margin-block-end: var(--pc-space-lg);
+}
+
+.hero--centered .hero__lead {
+  margin-inline: auto;
+}
+
+.hero--centered .button-group {
+  justify-content: center;
+}
+
+.hero__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pc-space-sm);
+}
+
+.hero__media {
+  position: relative;
+  overflow: hidden;
+  border: var(--pc-border);
+  border-radius: var(--pc-radius-lg);
+  background-color: var(--pc-bg-sunken);
+  aspect-ratio: 4 / 3;
+  box-shadow: var(--pc-shadow-lg);
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__note {
+  margin-block-start: var(--pc-space-lg);
+  font-size: var(--pc-text-sm);
+  line-height: var(--pc-leading-normal);
+  color: var(--pc-text-muted);
+  max-width: 46ch;
+}
+
+.hero__note strong {
+  color: var(--pc-text);
+}
+
+.hero__facts {
+  display: grid;
+  gap: var(--pc-space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(min(8rem, 100%), 1fr));
+  margin-block-start: var(--pc-space-xl);
+  padding-block-start: var(--pc-space-md);
+  border-block-start: var(--pc-border);
+}
+
+/* ---- Page header (interior pages) ------------------------------------- */
+
+.page-header {
+  padding-block: var(--pc-space-xl) var(--pc-space-lg);
+  border-block-end: var(--pc-border);
+}
+
+.page-header--plain {
+  border-block-end: 0;
+  padding-block-end: 0;
+}
+
+.page-header__breadcrumbs {
+  margin-block-end: var(--pc-space-md);
+}
+
+.page-header__title {
+  max-width: 26ch;
+  margin-block-end: var(--pc-space-sm);
+}
+
+.page-header__lead {
+  font-size: var(--pc-text-md);
+  line-height: var(--pc-leading-relaxed);
+  color: var(--pc-text-soft);
+  max-width: 58ch;
+  margin-block-end: 0;
+}
+
+.page-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem var(--pc-space-sm);
+  margin-block-start: var(--pc-space-md);
+  font-size: var(--pc-text-sm);
+  color: var(--pc-text-muted);
+}
+
+.page-header__actions {
+  margin-block-start: var(--pc-space-lg);
+}
+
+/* ---- Process ----------------------------------------------------------- */
+
+.process {
+  counter-reset: process;
+  display: grid;
+  /* The step numerals sit on top of each step's rule, so both the row gap and
+     the space above the list have to clear them. */
+  gap: var(--pc-space-xl) var(--pc-space-lg);
+  margin: var(--pc-space-lg) 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+}
+
+.process__step {
+  counter-increment: process;
+  position: relative;
+  padding-block-start: var(--pc-space-md);
+  border-block-start: 2px solid var(--pc-border-color);
+}
+
+.process__step::before {
+  content: counter(process, decimal-leading-zero);
+  position: absolute;
+  /* Half the numeral sits above the rule: the offset is relative to the top
+     of the padding box, which is the rule itself. */
+  inset-block-start: -0.6em;
+  inset-inline-start: 0;
+  padding-inline-end: 0.7rem;
+  background-color: var(--pc-bg);
+  color: var(--pc-accent);
+  font-family: var(--pc-font-display);
+  font-size: var(--pc-text-xl);
+  font-weight: var(--pc-weight-display);
+  line-height: 1;
+}
+
+.section--muted .process__step::before {
+  background-color: var(--pc-bg-muted);
+}
+
+.process__title {
+  font-size: var(--pc-text-md);
+  margin-block-end: var(--pc-space-2xs);
+}
+
+.process__text {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-relaxed);
+  margin: 0;
+}
+
+.process__duration {
+  display: block;
+  margin-block-start: var(--pc-space-xs);
+  font-size: var(--pc-text-2xs);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--pc-text-muted);
+}
+
+/* ---- Timeline ---------------------------------------------------------- */
+
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-inline-start: var(--pc-border);
+}
+
+.timeline__item {
+  position: relative;
+  padding-inline-start: var(--pc-space-lg);
+  padding-block-end: var(--pc-space-lg);
+}
+
+.timeline__item:last-child {
+  padding-block-end: 0;
+}
+
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -5px;
+  inset-block-start: 0.4rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--pc-accent);
+}
+
+.timeline__year {
+  display: block;
+  font-size: var(--pc-text-xs);
+  font-weight: var(--pc-weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--pc-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline__title {
+  font-size: var(--pc-text-md);
+  margin-block: 0.2rem var(--pc-space-2xs);
+}
+
+.timeline__text {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-relaxed);
+  margin: 0;
+  max-width: 58ch;
+}
+
+/* ---- Values ------------------------------------------------------------ */
+
+.values {
+  display: grid;
+  gap: var(--pc-space-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+
+.values__title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: var(--pc-text-md);
+  margin-block-end: var(--pc-space-2xs);
+}
+
+.values__title svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--pc-accent);
+  flex-shrink: 0;
+}
+
+.values__text {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-relaxed);
+  margin: 0;
+}
+
+/* ---- Pricing / engagement models -------------------------------------- */
+
+.pricing {
+  display: grid;
+  gap: var(--pc-space-md);
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  align-items: stretch;
+}
+
+.pricing-card {
+  padding: var(--pc-space-lg) var(--pc-space-md);
+  gap: var(--pc-space-sm);
+}
+
+.pricing-card--featured {
+  border-color: var(--pc-accent-line);
+  box-shadow: var(--pc-shadow);
+}
+
+.pricing-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--pc-space-xs);
+}
+
+.pricing-card__name {
+  font-size: var(--pc-text-md);
+  margin: 0;
+}
+
+.pricing-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--pc-font-display);
+  font-size: var(--pc-text-xl);
+  font-weight: var(--pc-weight-display);
+  letter-spacing: var(--pc-tracking-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.pricing-card__unit {
+  font-size: var(--pc-text-sm);
+  font-weight: var(--pc-weight-normal);
+  color: var(--pc-text-muted);
+  letter-spacing: 0;
+}
+
+.pricing-card__text {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-relaxed);
+  margin: 0;
+}
+
+.pricing-card__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--pc-text-sm);
+  border-block-start: var(--pc-border);
+  padding-block-start: var(--pc-space-sm);
+}
+
+.pricing-card__list li {
+  display: flex;
+  gap: 0.55rem;
+  padding-block: 0.25rem;
+}
+
+.pricing-card__list li::before {
+  content: "\2014";
+  flex-shrink: 0;
+  color: var(--pc-border-strong);
+}
+
+.pricing-card__footer {
+  margin-block-start: auto;
+  padding-block-start: var(--pc-space-sm);
+}
+
+.pricing-card__footer .button {
+  width: 100%;
+}
+
+/* ---- CTA band ---------------------------------------------------------- */
+
+.cta {
+  padding-block: var(--pc-section-padding);
+}
+
+.cta__panel {
+  display: grid;
+  gap: var(--pc-space-lg);
+  align-items: center;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  border-radius: var(--pc-radius-lg);
+  background-color: var(--pc-bg-inverse);
+  color: var(--pc-text-inverse);
+}
+
+@media (min-width: 56rem) {
+  .cta__panel {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: var(--pc-space-2xl);
+  }
+}
+
+.cta__title {
+  color: inherit;
+  margin-block-end: var(--pc-space-xs);
+  max-width: 24ch;
+}
+
+.cta__text {
+  color: var(--pc-text-inverse-muted);
+  margin-block-end: 0;
+  max-width: 52ch;
+}
+
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-xs);
+}
+
+@media (min-width: 56rem) {
+  .cta__actions {
+    justify-content: flex-end;
+  }
+}
+
+.cta--inverse .eyebrow {
+  color: color-mix(in srgb, var(--pc-accent) 72%, #fff);
+}

@@ -1,0 +1,17 @@
+{{- $page := . -}}
+<nav class="site-nav" aria-label="{{ i18n "primaryNavigation" }}">
+  <ul class="site-nav__list">
+    {{ range site.Menus.main }}
+      {{ $active := or ($page.IsMenuCurrent "main" .) ($page.HasMenuCurrent "main" .) }}
+      <li>
+        <a class="site-nav__link" href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>
+          {{ .Name }}
+        </a>
+      </li>
+    {{ end }}
+  </ul>
+
+  {{ with partial "utils/nav-cta.html" . }}
+    <a class="button button--primary button--sm" href="{{ .url }}">{{ .label }}</a>
+  {{ end }}
+</nav>

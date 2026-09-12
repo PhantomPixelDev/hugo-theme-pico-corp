@@ -1,0 +1,10 @@
+{{- /* {{< callout title="Note" >}} markdown body {{< /callout >}}
+
+  Uses the angle-bracket form on purpose: a percent-delimited shortcode has its
+  output re-parsed as markdown, so its HTML would be dropped unless the site
+  enables markup.goldmark.renderer.unsafe. The inner markdown is rendered here
+  instead, which keeps that setting off. */ -}}
+<aside class="callout">
+  {{- with .Get "title" }}<p class="callout__title">{{ . }}</p>{{ end }}
+  {{ .Inner | .Page.RenderString (dict "display" "block") }}
+</aside>

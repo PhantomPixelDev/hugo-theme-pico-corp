@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------------
+# Theme-level defaults.
+#
+# Hugo merges a theme's `params` and `taxonomies` into the site config, with
+# the site always winning, so everything here is an overridable default. The
+# demo site's own configuration lives in exampleSite/hugo.toml.
+#
+# `markup` and `outputs` are deliberately absent: Hugo does not merge those
+# from a theme, so declaring them here would look like configuration and do
+# nothing. The ones the theme expects are documented in README.md and set in
+# exampleSite/hugo.toml:
+#
+#   enableRobotsTXT = true
+#   capitalizeListTitles = false
+#   [markup.highlight] noClasses = false
+# ---------------------------------------------------------------------------
+
+[module]
+  [module.hugoVersion]
+    # The standard edition is enough: the theme ships plain CSS, so there is no
+    # Sass toolchain to satisfy.
+    extended = false
+    min = "0.146.0"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[params]
+  # --- brand ---------------------------------------------------------------
+  # Compiled into the stylesheet. Any CSS colour is accepted.
+  primaryColor = "#0f4c81"
+  primaryColorDark = "#8cc0ea"
+  radius = "0.5rem"
+  # "serif" uses the best serif already installed on the reader's system, which
+  # is what gives the theme its editorial feel at no network cost. "sans" opts
+  # out and sets headings in the body face.
+  headingFont = "serif"
+
+  # --- behaviour -----------------------------------------------------------
+  defaultScheme = "system" # "system" | "light" | "dark"
+  showSchemeToggle = true
+  showBreadcrumbs = true
+  showReadingTime = true
+  showRelated = true
+  dateFormat = "2 January 2006"
+
+  # --- left empty on purpose ----------------------------------------------
+  # Set these in your own site. Empty means the theme emits nothing, so a
+  # fresh install makes no requests for files that do not exist yet.
+  logo = ""
+  logoDark = ""
+  favicon = ""
+  appleTouchIcon = ""
+  ogImage = ""
+
+  [params.seo]
+    titleSeparator = "·"
+    organizationType = "Organization"
+
+  [params.analytics]
+    plausibleDomain = ""
+    googleAnalyticsID = ""
+
+  [params.contactForm]
+    action = ""
+    method = "POST"
+    netlify = false

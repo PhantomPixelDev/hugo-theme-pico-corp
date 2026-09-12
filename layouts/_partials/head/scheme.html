@@ -1,0 +1,17 @@
+{{- /* Applies the stored colour scheme before first paint so the page never
+       flashes the wrong theme. Kept inline and tiny on purpose. */ -}}
+{{- $default := site.Params.defaultScheme | default "system" -}}
+<script>
+  (function () {
+    try {
+      var s = localStorage.getItem("pc-scheme");
+      if (!s) {
+        var d = {{ $default }};
+        if (d === "light" || d === "dark") s = d;
+      }
+      if (s === "light" || s === "dark") {
+        document.documentElement.setAttribute("data-theme", s);
+      }
+    } catch (e) {}
+  })();
+</script>

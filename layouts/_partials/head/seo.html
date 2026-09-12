@@ -1,0 +1,58 @@
+{{- $sep := site.Params.seo.titleSeparator | default "·" -}}
+{{- $title := "" -}}
+{{- if .IsHome -}}
+  {{- $title = site.Title -}}
+  {{- with site.Params.tagline }}{{ $title = printf "%s %s %s" site.Title $sep . }}{{ end -}}
+{{- else -}}
+  {{- $title = printf "%s %s %s" (.Title | plainify) $sep site.Title -}}
+{{- end -}}
+
+{{- $description := "" -}}
+{{- with .Description -}}
+  {{- $description = . -}}
+{{- else -}}
+  {{- with .Summary }}{{ $description = . | plainify | truncate 180 }}{{ end -}}
+{{- end -}}
+{{- if not $description }}{{ $description = site.Params.description }}{{ end -}}
+
+{{- $imagePath := or .Params.image .Params.cover site.Params.ogImage -}}
+{{- $ogImage := "" -}}
+{{- with partial "utils/resolve-image.html" (dict "page" . "path" $imagePath) -}}
+  {{- if ne .MediaType.SubType "svg" -}}
+    {{- $ogImage = (.Fill "1200x630 Center").Permalink -}}
+  {{- else -}}
+    {{- $ogImage = .Permalink -}}
+  {{- end -}}
+{{- end -}}
+
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $description | plainify | chomp }}" />
+<link rel="canonical" href="{{ .Permalink }}" />
+{{ with site.Params.companyName }}<meta name="author" content="{{ . }}" />{{ end }}
+{{ if or .Params.noindex (eq (.Param "private") true) }}<meta name="robots" content="noindex, nofollow" />{{ end }}
+
+<meta property="og:site_name" content="{{ site.Title }}" />
+<meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title | plainify }}{{ end }}" />
+<meta property="og:description" content="{{ $description | plainify | chomp }}" />
+<meta property="og:type" content="{{ if eq .Type "blog" }}article{{ else }}website{{ end }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:locale" content="{{ replace (or site.Language.Locale "en") "-" "_" }}" />
+{{ with $ogImage }}
+  <meta property="og:image" content="{{ . }}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+{{ end }}
+{{ if eq .Type "blog" }}
+  {{ with .Date }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}" />{{ end }}
+  {{ with .Lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}" />{{ end }}
+  {{ range .GetTerms "categories" }}<meta property="article:section" content="{{ .LinkTitle }}" />{{ end }}
+  {{ range .GetTerms "tags" }}<meta property="article:tag" content="{{ .LinkTitle }}" />{{ end }}
+{{ end }}
+
+<meta name="twitter:card" content="{{ if $ogImage }}summary_large_image{{ else }}summary{{ end }}" />
+{{ with site.Params.seo.twitterSite }}<meta name="twitter:site" content="{{ . }}" />{{ end }}
+{{ with site.Params.seo.twitterCreator }}<meta name="twitter:creator" content="{{ . }}" />{{ end }}
+
+{{ range .AlternativeOutputFormats -}}
+  <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}" />
+{{ end -}}

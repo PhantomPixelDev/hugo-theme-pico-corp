@@ -1,0 +1,30 @@
+{{- /* Services overview, sourced from the services section pages.
+
+  cfg: eyebrow, title, lead, tone, limit, link { label, url }, center */ -}}
+{{- $cfg := .cfg -}}
+{{- $section := site.GetPage (printf "/%s" ($cfg.section | default "services")) -}}
+{{- with $section -}}
+  {{- $pages := .RegularPages -}}
+  {{- with $cfg.limit }}{{ $pages = first . $pages }}{{ end -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" ($cfg.title | default .LinkTitle)
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+
+      <div class="grid-auto grid-auto--gap-lg">
+        {{ range $pages }}
+          {{ partial "cards/service-card.html" . }}
+        {{ end }}
+      </div>
+
+      {{ with $cfg.link }}
+        <p class="section-footer">
+          <a class="link-arrow" href="{{ .url }}">{{ .label }}</a>
+        </p>
+      {{ end }}
+    </div>
+  </section>
+{{- end -}}

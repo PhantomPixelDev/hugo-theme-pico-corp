@@ -1,0 +1,11 @@
+{{- /* The theme's only script. Minified, fingerprinted and given a
+       subresource integrity hash in production; served as-is in development so
+       it stays readable in the debugger. */ -}}
+{{- with resources.Get "js/theme.js" -}}
+  {{- if hugo.IsProduction -}}
+    {{- $js := . | minify | fingerprint "sha256" -}}
+    <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+  {{- else -}}
+    <script src="{{ .RelPermalink }}" defer></script>
+  {{- end -}}
+{{- end -}}

@@ -1,0 +1,46 @@
+{{- /* Closing call to action.
+
+  Accepts a page, or a dict { page, cfg }. Any field missing from cfg falls
+  back to params.cta, so every page ends with a working CTA without repeating
+  the copy. Set cta = false in a page's front matter to suppress it. */ -}}
+{{- $page := . -}}
+{{- $cfg := dict -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = .page -}}
+  {{- $cfg = .cfg | default dict -}}
+{{- end -}}
+
+{{- if and $page (eq $page.Params.cta false) -}}
+  {{- /* Page opted out. */ -}}
+{{- else -}}
+  {{- $site := site.Params.cta | default dict -}}
+  {{- $eyebrow := $cfg.eyebrow | default $site.eyebrow -}}
+  {{- $title := $cfg.title | default $site.title -}}
+  {{- $text := $cfg.text | default $site.text -}}
+  {{- $primaryLabel := $cfg.primaryLabel | default $site.primaryLabel -}}
+  {{- $primaryURL := $cfg.primaryURL | default $site.primaryURL -}}
+  {{- $secondaryLabel := $cfg.secondaryLabel | default $site.secondaryLabel -}}
+  {{- $secondaryURL := $cfg.secondaryURL | default $site.secondaryURL -}}
+
+  {{- with $title -}}
+    <section class="cta cta--inverse">
+      <div class="container">
+        <div class="cta__panel">
+          <div>
+            {{ with $eyebrow }}<span class="eyebrow">{{ . }}</span>{{ end }}
+            <h2 class="cta__title">{{ . }}</h2>
+            {{ with $text }}<p class="cta__text">{{ . }}</p>{{ end }}
+          </div>
+          <div class="cta__actions">
+            {{ if and $primaryLabel $primaryURL }}
+              <a class="button button--primary button--lg" href="{{ $primaryURL }}">{{ $primaryLabel }}</a>
+            {{ end }}
+            {{ if and $secondaryLabel $secondaryURL }}
+              <a class="button button--secondary button--lg" href="{{ $secondaryURL }}">{{ $secondaryLabel }}</a>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </section>
+  {{- end -}}
+{{- end -}}

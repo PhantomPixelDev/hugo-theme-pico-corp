@@ -1,0 +1,10 @@
+<button
+  class="icon-button scheme-toggle"
+  type="button"
+  data-scheme-toggle
+  data-label-light="{{ i18n "switchToLight" }}"
+  data-label-dark="{{ i18n "switchToDark" }}"
+  aria-label="{{ i18n "switchToDark" }}">
+  <span class="scheme-toggle__icon scheme-toggle__icon--light">{{ partial "utils/icon.html" "moon" }}</span>
+  <span class="scheme-toggle__icon scheme-toggle__icon--dark">{{ partial "utils/icon.html" "sun" }}</span>
+</button>

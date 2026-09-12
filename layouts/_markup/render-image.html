@@ -1,0 +1,11 @@
+{{- /* Markdown images go through the same pipeline as template images: resized,
+       WebP first, lazy loaded, wrapped in a figure when a title is given. */ -}}
+{{- $caption := .Title -}}
+{{- $figure := ne $caption "" -}}
+{{- if $figure }}<figure>{{ end -}}
+{{ partial "utils/image.html" (dict
+  "page" .Page
+  "path" .Destination
+  "alt" .Text
+  "sizes" "(min-width: 46rem) 40rem, 100vw") }}
+{{- if $figure }}<figcaption>{{ $caption | markdownify }}</figcaption></figure>{{ end -}}

@@ -1,0 +1,19 @@
+{{- /* Shared heading block for every section.
+
+  dict keys: eyebrow, title, lead, center (bool), level ("h2" default, "h3"
+  for nested blocks). Element names cannot be built dynamically in Go
+  templates, so the two supported levels are written out. */ -}}
+{{- $level := .level | default "h2" -}}
+{{- if or .title .lead .eyebrow -}}
+  <div class="section-head{{ if .center }} section-head--center{{ end }}">
+    {{ with .eyebrow }}<span class="eyebrow">{{ . }}</span>{{ end }}
+    {{ with .title }}
+      {{ if eq $level "h3" }}
+        <h3 class="section-head__title">{{ . }}</h3>
+      {{ else }}
+        <h2 class="section-head__title">{{ . }}</h2>
+      {{ end }}
+    {{ end }}
+    {{ with .lead }}<p class="section-head__lead">{{ . | markdownify }}</p>{{ end }}
+  </div>
+{{- end -}}

@@ -1,0 +1,22 @@
+{{- $page := . -}}
+<div class="mobile-nav" id="mobile-nav" data-open="false">
+  <nav class="container" aria-label="{{ i18n "mobileNavigation" }}">
+    <ul class="mobile-nav__list">
+      {{ range site.Menus.main }}
+        {{ $active := or ($page.IsMenuCurrent "main" .) ($page.HasMenuCurrent "main" .) }}
+        <li>
+          <a class="mobile-nav__link" href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>
+            <span>{{ .Name }}</span>
+            {{ partial "utils/icon.html" "arrow-right" }}
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+
+    {{ with partial "utils/nav-cta.html" . }}
+      <div class="mobile-nav__cta">
+        <a class="button button--primary" href="{{ .url }}">{{ .label }}</a>
+      </div>
+    {{ end }}
+  </nav>
+</div>

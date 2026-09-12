@@ -1,0 +1,23 @@
+{{- /* Statistics band. cfg: eyebrow, title, lead, tone, data (default "stats").
+       Each entry: { value, label } */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "stats")) -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+      <ul class="stats">
+        {{ range . }}
+          <li class="stat">
+            <span class="stat__value">{{ .value }}</span>
+            <span class="stat__label">{{ .label }}</span>
+          </li>
+        {{ end }}
+      </ul>
+    </div>
+  </section>
+{{- end -}}

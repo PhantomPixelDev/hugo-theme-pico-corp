@@ -1,0 +1,43 @@
+{{- /* Numbered pagination with a sliding window. Expects a page that has
+       called .Paginate, and renders nothing for a single page of results. */ -}}
+{{- $p := .Paginator -}}
+{{- if gt $p.TotalPages 1 -}}
+  {{- $current := $p.PageNumber -}}
+  {{- $total := $p.TotalPages -}}
+  {{- $window := 1 -}}
+  <nav class="pagination" aria-label="{{ i18n "pagination" }}">
+    <ul class="pagination__list">
+      <li>
+        {{ if $p.HasPrev }}
+          <a class="pagination__link" href="{{ $p.Prev.URL }}" rel="prev" aria-label="{{ i18n "previousPage" }}">&larr;</a>
+        {{ else }}
+          <span class="pagination__link" aria-disabled="true" aria-hidden="true">&larr;</span>
+        {{ end }}
+      </li>
+
+      {{ range $p.Pagers }}
+        {{ $n := .PageNumber }}
+        {{ $edge := or (eq $n 1) (eq $n $total) }}
+        {{ $diff := sub $n $current }}
+        {{ $near := and (ge $diff (sub 0 $window)) (le $diff $window) }}
+        {{ if or $edge $near }}
+          <li>
+            <a class="pagination__link" href="{{ .URL }}"
+              {{ if eq $n $current }}aria-current="page"{{ end }}
+              aria-label="{{ i18n "page" }} {{ $n }}">{{ $n }}</a>
+          </li>
+        {{ else if or (eq $n 2) (eq $n (sub $total 1)) }}
+          <li><span class="pagination__ellipsis" aria-hidden="true">&hellip;</span></li>
+        {{ end }}
+      {{ end }}
+
+      <li>
+        {{ if $p.HasNext }}
+          <a class="pagination__link" href="{{ $p.Next.URL }}" rel="next" aria-label="{{ i18n "nextPage" }}">&rarr;</a>
+        {{ else }}
+          <span class="pagination__link" aria-disabled="true" aria-hidden="true">&rarr;</span>
+        {{ end }}
+      </li>
+    </ul>
+  </nav>
+{{- end -}}

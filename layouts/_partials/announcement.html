@@ -1,0 +1,12 @@
+{{- with site.Params.announcement -}}
+  {{- if and .enabled .text -}}
+    <aside class="announcement">
+      <div class="container announcement__inner">
+        <p>{{ .text }}</p>
+        {{ with .linkURL }}
+          <a href="{{ . }}">{{ site.Params.announcement.linkLabel | default (i18n "learnMore") }}</a>
+        {{ end }}
+      </div>
+    </aside>
+  {{- end -}}
+{{- end -}}

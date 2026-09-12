@@ -1,0 +1,23 @@
+{{- /* Company timeline. cfg: eyebrow, title, lead, tone, data (default
+       "timeline"). Each entry: { year, title, text } */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "timeline")) -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container split split--aside">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead) }}
+      <ol class="timeline">
+        {{ range . }}
+          <li class="timeline__item">
+            <span class="timeline__year">{{ .year }}</span>
+            <h3 class="timeline__title">{{ .title }}</h3>
+            <p class="timeline__text">{{ .text }}</p>
+          </li>
+        {{ end }}
+      </ol>
+    </div>
+  </section>
+{{- end -}}

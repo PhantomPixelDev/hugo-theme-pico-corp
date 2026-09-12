@@ -1,0 +1,15 @@
+{{- /* Renders the page's own markdown as a section, so a composed page can mix
+       structured sections with regular prose. cfg: eyebrow, title, lead, tone. */ -}}
+{{- $cfg := .cfg -}}
+{{- $page := .page -}}
+{{- with $page.Content -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead) }}
+      <div class="prose prose--wide">{{ . }}</div>
+    </div>
+  </section>
+{{- end -}}

@@ -1,0 +1,24 @@
+{{- /* Process steps. cfg: eyebrow, title, lead, tone, data (default "process").
+       Each entry: { title, text, duration } */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "process")) -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+      <ol class="process">
+        {{ range . }}
+          <li class="process__step">
+            <h3 class="process__title">{{ .title }}</h3>
+            <p class="process__text">{{ .text }}</p>
+            {{ with .duration }}<span class="process__duration">{{ . }}</span>{{ end }}
+          </li>
+        {{ end }}
+      </ol>
+    </div>
+  </section>
+{{- end -}}

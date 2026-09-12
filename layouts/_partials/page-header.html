@@ -1,0 +1,22 @@
+{{- /* Interior page header.
+
+  Accepts a page, or a dict { page, plain (bool), showBreadcrumbs (bool) }.
+  Reads `eyebrow` and `lead` (falling back to the page description) from front
+  matter, so every page gets a consistent opening block. */ -}}
+{{- $page := . -}}
+{{- $plain := false -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = .page -}}
+  {{- $plain = .plain | default false -}}
+{{- end -}}
+
+<header class="page-header{{ if $plain }} page-header--plain{{ end }}">
+  <div class="container">
+    <div class="page-header__breadcrumbs">{{ partial "breadcrumbs.html" $page }}</div>
+    {{ with $page.Params.eyebrow }}<span class="eyebrow">{{ . }}</span>{{ end }}
+    <h1 class="page-header__title">{{ $page.Title }}</h1>
+    {{ with or $page.Params.lead $page.Description }}
+      <p class="page-header__lead">{{ . | markdownify }}</p>
+    {{ end }}
+  </div>
+</header>

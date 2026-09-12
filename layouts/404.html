@@ -1,0 +1,18 @@
+{{ define "main" }}
+  <div class="container error-page">
+    <div>
+      <p class="error-page__code">404</p>
+      <h1>{{ i18n "notFoundTitle" }}</h1>
+      <p class="muted">{{ i18n "notFoundText" }}</p>
+      <div class="error-page__links">
+        <a class="button button--primary" href="{{ site.Home.RelPermalink }}">{{ i18n "backHome" }}</a>
+        {{ with site.GetPage "/work" }}
+          <a class="button button--secondary" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+        {{ end }}
+        {{ with site.GetPage "/contact" }}
+          <a class="button button--secondary" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+{{ end }}

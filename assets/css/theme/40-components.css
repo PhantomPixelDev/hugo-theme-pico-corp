@@ -1,0 +1,909 @@
+/* ==========================================================================
+   Components
+   Buttons, cards, badges, statistics, testimonials, logo wall, FAQ, forms,
+   breadcrumbs and pagination.
+   ========================================================================== */
+
+/* ---- Buttons -----------------------------------------------------------
+   Pico already styles button and [role="button"]. The theme keeps those
+   defaults and layers on a slightly tighter, more corporate treatment that
+   both the element and the .button class share.
+   ---------------------------------------------------------------------- */
+
+.button,
+button,
+input[type="submit"],
+input[type="button"],
+[role="button"] {
+  --pc-button-bg: var(--pc-accent);
+  --pc-button-fg: var(--pc-on-accent);
+  --pc-button-border: var(--pc-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1.15rem;
+  border: var(--pc-border-width) solid var(--pc-button-border);
+  border-radius: var(--pc-radius-sm);
+  background-color: var(--pc-button-bg);
+  color: var(--pc-button-fg);
+  font-family: inherit;
+  font-size: var(--pc-text-sm);
+  font-weight: var(--pc-weight-medium);
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--pc-duration-fast) var(--pc-ease),
+    border-color var(--pc-duration-fast) var(--pc-ease),
+    color var(--pc-duration-fast) var(--pc-ease),
+    transform var(--pc-duration-fast) var(--pc-ease),
+    box-shadow var(--pc-duration-fast) var(--pc-ease);
+}
+
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+[role="button"]:hover {
+  background-color: var(--pc-accent-hover);
+  border-color: var(--pc-accent-hover);
+  color: var(--pc-button-fg);
+  transform: translateY(-1px);
+  box-shadow: var(--pc-shadow-sm);
+}
+
+.button:active,
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.button svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+/* Secondary: hairline outline, the workhorse for every secondary CTA. */
+.button--secondary,
+button.secondary,
+[role="button"].secondary {
+  --pc-button-bg: transparent;
+  --pc-button-fg: var(--pc-text);
+  --pc-button-border: var(--pc-border-strong);
+}
+
+.button--secondary:hover,
+button.secondary:hover {
+  background-color: var(--pc-bg-muted);
+  border-color: var(--pc-text-muted);
+  color: var(--pc-text);
+}
+
+/* Ghost: text-only, used inside cards and next to headings. */
+.button--ghost {
+  --pc-button-bg: transparent;
+  --pc-button-fg: var(--pc-accent);
+  --pc-button-border: transparent;
+  padding-inline: 0.35rem;
+}
+
+.button--ghost:hover {
+  background-color: var(--pc-accent-quiet);
+  border-color: transparent;
+  color: var(--pc-accent-hover);
+  box-shadow: none;
+}
+
+/* On inverse sections the primary button flips to the page background. */
+.section--inverse .button--primary,
+.cta--inverse .button--primary {
+  --pc-button-bg: var(--pc-bg-inverse);
+  --pc-button-fg: var(--pc-text-inverse);
+  --pc-button-border: var(--pc-bg-inverse);
+}
+
+.section--inverse .button--primary:hover,
+.cta--inverse .button--primary:hover {
+  background-color: color-mix(in srgb, var(--pc-bg-inverse) 88%, transparent);
+  border-color: color-mix(in srgb, var(--pc-bg-inverse) 88%, transparent);
+}
+
+.section--inverse .button--secondary,
+.cta--inverse .button--secondary {
+  --pc-button-fg: var(--pc-text-inverse);
+  --pc-button-border: color-mix(in srgb, var(--pc-text-inverse) 35%, transparent);
+}
+
+.section--inverse .button--secondary:hover,
+.cta--inverse .button--secondary:hover {
+  background-color: color-mix(in srgb, var(--pc-text-inverse) 10%, transparent);
+  border-color: var(--pc-text-inverse);
+  color: var(--pc-text-inverse);
+}
+
+.button--sm {
+  padding: 0.5rem 0.8rem;
+  font-size: var(--pc-text-xs);
+}
+
+.button--lg {
+  padding: 0.9rem 1.5rem;
+  font-size: var(--pc-text-base);
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-xs);
+}
+
+@media (max-width: 24rem) {
+  .button-group .button {
+    width: 100%;
+  }
+}
+
+/* Link with a trailing arrow that nudges on hover. */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--pc-text-sm);
+  font-weight: var(--pc-weight-medium);
+  text-decoration: none;
+}
+
+.link-arrow::after {
+  content: "\2192";
+  transition: transform var(--pc-duration-fast) var(--pc-ease);
+}
+
+.link-arrow:hover::after {
+  transform: translateX(3px);
+}
+
+/* ---- Badges and tags --------------------------------------------------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border: var(--pc-border);
+  border-radius: var(--pc-radius-pill);
+  background-color: var(--pc-bg);
+  color: var(--pc-text-muted);
+  font-size: var(--pc-text-xs);
+  font-weight: var(--pc-weight-medium);
+  letter-spacing: 0;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.badge--accent {
+  border-color: var(--pc-accent-line);
+  background-color: var(--pc-accent-quiet);
+  color: var(--pc-accent);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-3xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag-list a {
+  text-decoration: none;
+}
+
+.tag-list a:hover .badge {
+  border-color: var(--pc-text-muted);
+  color: var(--pc-text);
+}
+
+/* ---- Card foundation --------------------------------------------------- */
+
+.card,
+.service-card,
+.project-card,
+.post-card,
+.team-card,
+.pricing-card,
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  border: var(--pc-border);
+  border-radius: var(--pc-radius);
+  background-color: var(--pc-surface);
+  transition: border-color var(--pc-duration) var(--pc-ease),
+    box-shadow var(--pc-duration) var(--pc-ease),
+    transform var(--pc-duration) var(--pc-ease);
+}
+
+.card {
+  padding: var(--pc-space-md);
+}
+
+/* ---- Service card ------------------------------------------------------ */
+
+.service-card {
+  padding: var(--pc-space-md);
+  gap: var(--pc-space-xs);
+  position: relative;
+}
+
+.service-card:hover {
+  border-color: var(--pc-border-strong);
+  box-shadow: var(--pc-shadow);
+}
+
+.service-card__icon {
+  display: block;
+  margin-block-end: var(--pc-space-2xs);
+  color: var(--pc-accent);
+}
+
+.service-card__icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.service-card__title {
+  font-size: var(--pc-text-lg);
+  margin: 0;
+}
+
+.service-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* The whole card is clickable while the link text stays the accessible name. */
+.service-card__title a::after,
+.project-card__title a::after,
+.post-card__title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.service-card__text {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-relaxed);
+  margin: 0;
+}
+
+.service-card__list {
+  margin: var(--pc-space-2xs) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--pc-text-sm);
+  line-height: var(--pc-leading-normal);
+  color: var(--pc-text-muted);
+}
+
+.service-card__list li {
+  display: flex;
+  gap: 0.5rem;
+  padding-block: 0.15rem;
+}
+
+.service-card__list li::before {
+  content: "\2014";
+  color: var(--pc-border-strong);
+  flex-shrink: 0;
+}
+
+/* ---- Project card ----------------------------------------------------- */
+
+.project-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  border-color: var(--pc-border-strong);
+  box-shadow: var(--pc-shadow);
+}
+
+.project-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: var(--pc-bg-sunken);
+}
+
+.project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--pc-ease);
+}
+
+.project-card:hover .project-card__media img {
+  transform: scale(1.03);
+}
+
+.project-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pc-space-2xs);
+  padding: var(--pc-space-md);
+}
+
+.project-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.5rem;
+  font-size: var(--pc-text-2xs);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--pc-text-muted);
+}
+
+/* Editorial slash between client, discipline and year. It belongs to the item
+   before it, so a wrap leaves the slash at the end of the line rather than
+   starting the next one with it. */
+.project-card__meta span:not(:last-child)::after {
+  content: " /";
+  margin-inline-start: 0.35rem;
+  color: var(--pc-border-strong);
+}
+
+.project-card__title {
+  font-size: var(--pc-text-lg);
+  margin: 0;
+}
+
+.project-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-card__text {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-relaxed);
+  margin: 0;
+}
+
+.project-card__result {
+  margin-block-start: auto;
+  padding-block-start: var(--pc-space-xs);
+  border-block-start: var(--pc-border);
+  font-size: var(--pc-text-sm);
+  font-weight: var(--pc-weight-medium);
+  color: var(--pc-accent);
+}
+
+/* Featured variant spans two columns on wide grids. */
+@media (min-width: 56rem) {
+  .project-card--featured {
+    grid-column: span 2;
+    flex-direction: row;
+  }
+
+  .project-card--featured .project-card__media {
+    flex: 1 1 55%;
+    aspect-ratio: auto;
+  }
+
+  .project-card--featured .project-card__body {
+    flex: 1 1 45%;
+    justify-content: center;
+    padding: var(--pc-space-lg);
+  }
+}
+
+/* ---- Post card -------------------------------------------------------- */
+
+.post-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.post-card:hover {
+  border-color: var(--pc-border-strong);
+  box-shadow: var(--pc-shadow);
+}
+
+.post-card__media {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background-color: var(--pc-bg-sunken);
+}
+
+.post-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pc-space-2xs);
+  padding: var(--pc-space-md);
+  flex: 1;
+}
+
+.post-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem var(--pc-space-xs);
+  font-size: var(--pc-text-xs);
+  color: var(--pc-text-soft);
+}
+
+.post-card__title {
+  font-size: var(--pc-text-md);
+  line-height: var(--pc-leading-snug);
+  margin: 0;
+}
+
+.post-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-card__text {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-relaxed);
+  margin: 0;
+}
+
+.post-card__footer {
+  margin-block-start: auto;
+  padding-block-start: var(--pc-space-xs);
+  font-size: var(--pc-text-xs);
+  color: var(--pc-text-muted);
+}
+
+/* ---- Team card -------------------------------------------------------- */
+
+.team-card {
+  overflow: hidden;
+  border: 0;
+  background: none;
+}
+
+.team-card__media {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--pc-radius);
+  background-color: var(--pc-bg-sunken);
+  margin-block-end: var(--pc-space-sm);
+}
+
+.team-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter 400ms var(--pc-ease);
+}
+
+.team-card:hover .team-card__media img {
+  filter: grayscale(0);
+}
+
+.team-card__name {
+  font-size: var(--pc-text-base);
+  margin: 0 0 0.15rem;
+}
+
+.team-card__role {
+  color: var(--pc-text-muted);
+  font-size: var(--pc-text-sm);
+  margin: 0;
+}
+
+.team-card__bio {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-sm);
+  line-height: var(--pc-leading-relaxed);
+  margin-block-start: var(--pc-space-2xs);
+}
+
+/* ---- Statistics ------------------------------------------------------- */
+
+.stats {
+  display: grid;
+  gap: var(--pc-space-md);
+  grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat__value {
+  display: block;
+}
+
+.stat {
+  border: 0;
+  border-inline-start: 2px solid var(--pc-accent-line);
+  border-radius: 0;
+  background: none;
+  padding-inline-start: var(--pc-space-sm);
+}
+
+.stat__value {
+  font-family: var(--pc-font-display);
+  font-size: var(--pc-text-2xl);
+  font-weight: var(--pc-weight-display);
+  letter-spacing: var(--pc-tracking-snug);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__label {
+  display: block;
+  margin-block-start: var(--pc-space-2xs);
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-xs);
+}
+
+/* ---- Logo wall -------------------------------------------------------- */
+
+.logo-wall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pc-space-md) var(--pc-space-xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logo-wall__item {
+  font-size: var(--pc-text-md);
+  font-weight: var(--pc-weight-semibold);
+  letter-spacing: var(--pc-tracking-snug);
+  color: var(--pc-text-muted);
+  opacity: 0.75;
+  transition: opacity var(--pc-duration) var(--pc-ease),
+    color var(--pc-duration) var(--pc-ease);
+}
+
+.logo-wall__item:hover {
+  opacity: 1;
+  color: var(--pc-text);
+}
+
+.logo-wall__item img {
+  height: 1.6rem;
+  width: auto;
+}
+
+/* ---- Testimonial ------------------------------------------------------ */
+
+.testimonial {
+  padding: var(--pc-space-md);
+  gap: var(--pc-space-sm);
+}
+
+.testimonial__quote {
+  margin: 0;
+  font-family: var(--pc-font-display);
+  font-size: var(--pc-text-md);
+  line-height: var(--pc-leading-snug);
+  letter-spacing: var(--pc-tracking-snug);
+}
+
+.testimonial__quote::before {
+  content: "\201C";
+  color: var(--pc-accent);
+}
+
+.testimonial__quote::after {
+  content: "\201D";
+  color: var(--pc-accent);
+}
+
+.testimonial__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--pc-space-xs);
+  margin-block-start: auto;
+  padding-block-start: var(--pc-space-xs);
+  border-block-start: var(--pc-border);
+  font-size: var(--pc-text-sm);
+}
+
+.testimonial__name {
+  font-weight: var(--pc-weight-medium);
+  font-style: normal;
+}
+
+.testimonial__role {
+  color: var(--pc-text-muted);
+}
+
+.testimonial--lead {
+  position: relative;
+  padding: var(--pc-space-lg);
+  padding-block-start: calc(var(--pc-space-lg) + 1.6rem);
+}
+
+.testimonial--lead::before {
+  content: "“";
+  position: absolute;
+  inset-block-start: 0.1rem;
+  inset-inline-start: var(--pc-space-md);
+  font-family: var(--pc-font-display);
+  font-size: 4.5rem;
+  line-height: 1;
+  color: var(--pc-accent-line);
+  pointer-events: none;
+}
+
+/* Inside prose the blockquote and figcaption already carry their own rules.
+   The card provides the structure here, so drop both. */
+.prose .testimonial__quote {
+  border-inline-start: 0;
+  padding-inline-start: 0;
+  font-size: var(--pc-text-lg);
+  letter-spacing: var(--pc-tracking-snug);
+}
+
+.prose .testimonial__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem var(--pc-space-xs);
+  margin-block-start: var(--pc-space-sm);
+  font-size: var(--pc-text-sm);
+  color: var(--pc-text-muted);
+}
+
+.prose .testimonial__footer::before {
+  content: none;
+}
+
+.testimonial--lead .testimonial__quote {
+  font-size: var(--pc-text-lg);
+  line-height: var(--pc-leading-snug);
+}
+
+/* The decorative mark replaces the typed quotes on this variant. */
+.testimonial--lead .testimonial__quote::before,
+.testimonial--lead .testimonial__quote::after {
+  content: none;
+}
+
+/* ---- FAQ (native details, no JavaScript) ------------------------------ */
+
+.faq {
+  max-width: var(--pc-container-narrow);
+  border-block-start: var(--pc-border);
+}
+
+.faq__item {
+  border-block-end: var(--pc-border);
+  padding: 0;
+}
+
+.faq__item summary {
+  font-family: var(--pc-font-display);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--pc-space-sm);
+  padding-block: var(--pc-space-sm);
+  font-size: var(--pc-text-md);
+  font-weight: var(--pc-weight-medium);
+  letter-spacing: var(--pc-tracking-snug);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: var(--pc-text-lg);
+  font-weight: var(--pc-weight-normal);
+  color: var(--pc-accent);
+  line-height: 1;
+  transition: transform var(--pc-duration) var(--pc-ease);
+}
+
+.faq__item[open] summary::after {
+  content: "\2212";
+}
+
+.faq__item summary:hover {
+  color: var(--pc-accent);
+}
+
+.faq__answer {
+  padding-block-end: var(--pc-space-md);
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-card);
+  line-height: var(--pc-leading-loose);
+  max-width: 64ch;
+}
+
+.faq__answer > :last-child {
+  margin-block-end: 0;
+}
+
+/* ---- Forms ------------------------------------------------------------ */
+
+form fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+form fieldset > * + * {
+  margin-block-start: var(--pc-space-md);
+}
+
+.form-grid {
+  display: grid;
+  gap: var(--pc-space-sm);
+}
+
+@media (min-width: 40rem) {
+  .form-grid--two {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-grid__full {
+    grid-column: 1 / -1;
+  }
+}
+
+.form-field label {
+  display: block;
+  margin-block-end: 0.35rem;
+  font-size: var(--pc-text-sm);
+  font-weight: var(--pc-weight-medium);
+}
+
+.form-field :where(input, select, textarea) {
+  margin-block-end: 0;
+  border-radius: var(--pc-radius-sm);
+  font-size: var(--pc-text-sm);
+}
+
+.form-field__hint {
+  display: block;
+  margin-block-start: 0.3rem;
+  color: var(--pc-text-muted);
+  font-size: var(--pc-text-xs);
+}
+
+.form-field--required label::after {
+  content: "*";
+  margin-inline-start: 0.2rem;
+  color: var(--pc-accent);
+}
+
+.form-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: var(--pc-text-sm);
+}
+
+.form-consent input {
+  margin: 0.15rem 0 0;
+  flex-shrink: 0;
+}
+
+.form-note {
+  border: var(--pc-border);
+  border-inline-start: 3px solid var(--pc-accent);
+  border-radius: var(--pc-radius-sm);
+  background-color: var(--pc-bg-muted);
+  padding: var(--pc-space-sm);
+  font-size: var(--pc-text-sm);
+  color: var(--pc-text-muted);
+}
+
+.form-note > :last-child {
+  margin-block-end: 0;
+}
+
+/* ---- Breadcrumbs ------------------------------------------------------ */
+
+.breadcrumbs {
+  font-size: var(--pc-text-xs);
+  color: var(--pc-text-muted);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-inline-start: 0.55rem;
+  color: var(--pc-border-strong);
+}
+
+.breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  color: var(--pc-text);
+  text-decoration: underline;
+}
+
+/* ---- Pagination ------------------------------------------------------- */
+
+.pagination {
+  margin-block-start: var(--pc-space-2xl);
+  padding-block-start: var(--pc-space-md);
+  border-block-start: var(--pc-border);
+}
+
+.pagination__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pc-space-3xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pagination__link {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding-inline: 0.6rem;
+  border: var(--pc-border);
+  border-radius: var(--pc-radius-sm);
+  color: var(--pc-text-muted);
+  font-size: var(--pc-text-sm);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagination__link:hover {
+  border-color: var(--pc-border-strong);
+  color: var(--pc-text);
+  background-color: var(--pc-bg-muted);
+}
+
+.pagination__link[aria-current="page"] {
+  border-color: var(--pc-accent);
+  background-color: var(--pc-accent);
+  color: var(--pc-on-accent);
+}
+
+.pagination__link[aria-disabled="true"] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.pagination__ellipsis {
+  padding-inline: 0.3rem;
+  color: var(--pc-text-muted);
+}

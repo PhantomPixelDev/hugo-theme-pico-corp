@@ -1,0 +1,6 @@
+{{- /* The icon sprite is inlined once per page and referenced with <use>.
+       Roughly 4 KB uncompressed, about 1 KB over the wire, and it removes an
+       extra request plus every duplicated inline path. */ -}}
+{{- with resources.Get "icons/sprite.svg" -}}
+  {{- .Content | safeHTML -}}
+{{- end -}}

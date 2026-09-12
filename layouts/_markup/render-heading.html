@@ -1,0 +1,7 @@
+{{- /* Headings get a permalink anchor that only appears on hover or focus. */ -}}
+<h{{ .Level }} id="{{ .Anchor }}">
+  {{- .Text | safeHTML -}}
+  {{- if ge .Level 2 -}}
+    <a class="heading-anchor" href="#{{ .Anchor }}" aria-label="{{ printf "Link to this section: %s" (.Text | plainify) }}">#</a>
+  {{- end -}}
+</h{{ .Level }}>

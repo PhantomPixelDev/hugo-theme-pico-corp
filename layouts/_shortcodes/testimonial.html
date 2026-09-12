@@ -1,0 +1,13 @@
+{{- /* {{< testimonial name="…" role="…" >}} quote {{< /testimonial >}}
+
+  Angle-bracket form, same reason as callout: the inner markdown is rendered
+  here so the site does not need unsafe HTML enabled. */ -}}
+<figure class="testimonial testimonial--lead">
+  <blockquote class="testimonial__quote">
+    {{ .Inner | .Page.RenderString (dict "display" "inline") }}
+  </blockquote>
+  <figcaption class="testimonial__footer">
+    <span class="testimonial__name">{{ .Get "name" }}</span>
+    <span class="testimonial__role">{{ .Get "role" }}</span>
+  </figcaption>
+</figure>

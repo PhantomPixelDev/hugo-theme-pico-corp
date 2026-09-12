@@ -1,0 +1,31 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  {{ $paginator := .Paginate .Pages }}
+
+  <section class="section">
+    <div class="container">
+      <nav class="filter-bar" aria-label="{{ i18n "filterByCategory" }}">
+        {{ with .Parent }}
+          <a class="filter-bar__link" href="{{ .RelPermalink }}">{{ i18n "allTerms" }}</a>
+        {{ end }}
+        <a class="filter-bar__link" href="{{ .RelPermalink }}" aria-current="page">{{ .LinkTitle }}</a>
+        <span class="listing-count">{{ i18n "postCount" (len .Pages) }}</span>
+      </nav>
+
+      <div class="grid-auto grid-auto--gap-lg">
+        {{ range $paginator.Pages }}
+          {{ if eq .Type "work" }}
+            {{ partial "cards/project-card.html" (dict "page" . "headingLevel" "h2") }}
+          {{ else }}
+            {{ partial "cards/post-card.html" (dict "page" . "headingLevel" "h2") }}
+          {{ end }}
+        {{ end }}
+      </div>
+
+      {{ partial "pagination.html" . }}
+    </div>
+  </section>
+
+  {{ partial "cta.html" . }}
+{{ end }}

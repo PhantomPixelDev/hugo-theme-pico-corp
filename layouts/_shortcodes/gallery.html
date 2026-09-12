@@ -1,0 +1,15 @@
+{{- /* {{< gallery "images/a.jpg" "images/b.jpg" >}} — page resources work too. */ -}}
+{{- with .Params -}}
+<ul class="gallery">
+  {{ range . }}
+    <li class="gallery__item">
+      {{ partial "utils/image.html" (dict
+        "page" $.Page
+        "path" .
+        "alt" ""
+        "sizes" "(min-width: 56rem) 33vw, 100vw"
+        "widths" (slice 480 768 1200)) }}
+    </li>
+  {{ end }}
+</ul>
+{{- end -}}

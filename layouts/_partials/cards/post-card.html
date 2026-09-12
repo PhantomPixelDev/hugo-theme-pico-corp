@@ -1,0 +1,46 @@
+{{- /* Journal post card. Accepts a page, or a dict { page, showImage }. */ -}}
+{{- $page := . -}}
+{{- $showImage := true -}}
+{{- $level := "h3" -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = .page -}}
+  {{- if isset . "showImage" }}{{ $showImage = .showImage }}{{ end -}}
+  {{- $level = .headingLevel | default "h3" -}}
+{{- end -}}
+
+<article class="post-card">
+  {{ if $showImage }}
+    {{ with $page.Params.image }}
+      <div class="post-card__media">
+        {{ partial "utils/image.html" (dict
+          "page" $page
+          "path" .
+          "alt" ($page.Params.imageAlt | default "")
+          "sizes" "(min-width: 56rem) 30vw, 100vw") }}
+      </div>
+    {{ end }}
+  {{ end }}
+  <div class="post-card__body">
+    <p class="post-card__meta">
+      {{ with ($page.GetTerms "categories") }}
+        <span class="badge badge--accent">{{ (index . 0).LinkTitle }}</span>
+      {{ end }}
+      <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ partial "utils/date.html" $page.Date }}</time>
+    </p>
+    {{ if eq $level "h2" }}
+      <h2 class="post-card__title">
+        <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
+      </h2>
+    {{ else }}
+      <h3 class="post-card__title">
+        <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
+      </h3>
+    {{ end }}
+    {{ with or $page.Params.summary $page.Description $page.Summary }}
+      <p class="post-card__text">{{ . | plainify | truncate 140 }}</p>
+    {{ end }}
+    {{ if site.Params.showReadingTime | default true }}
+      <p class="post-card__footer">{{ i18n "readingTime" $page.ReadingTime }}</p>
+    {{ end }}
+  </div>
+</article>

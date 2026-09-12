@@ -1,0 +1,12 @@
+{{- /* {{< stats "3.1s → 0.9s|Largest contentful paint" "+38%|Qualified leads" >}} */ -}}
+{{- with .Params -}}
+<ul class="stats">
+  {{ range . }}
+    {{ $parts := split . "|" }}
+    <li class="stat">
+      <span class="stat__value">{{ index $parts 0 }}</span>
+      {{ if gt (len $parts) 1 }}<span class="stat__label">{{ index $parts 1 }}</span>{{ end }}
+    </li>
+  {{ end }}
+</ul>
+{{- end -}}

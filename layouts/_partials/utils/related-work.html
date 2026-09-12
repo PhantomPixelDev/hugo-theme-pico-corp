@@ -1,0 +1,29 @@
+{{- /* Related case studies: explicit `related` paths from front matter first,
+       then other studies in the same category, then the most recent. */ -}}
+{{- $page := . -}}
+{{- $limit := 3 -}}
+{{- $out := slice -}}
+
+{{- range $page.Params.related -}}
+  {{- with site.GetPage . -}}
+    {{- $out = $out | append . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if lt (len $out) $limit -}}
+  {{- $siblings := where $page.CurrentSection.RegularPages "Permalink" "!=" $page.Permalink -}}
+  {{- with $page.Params.category -}}
+    {{- range where $siblings "Params.category" . -}}
+      {{- if and (lt (len $out) $limit) (not (in $out .)) -}}
+        {{- $out = $out | append . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- range $siblings -}}
+    {{- if and (lt (len $out) $limit) (not (in $out .)) -}}
+      {{- $out = $out | append . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return first $limit $out -}}

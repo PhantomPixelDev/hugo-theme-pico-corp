@@ -1,0 +1,39 @@
+{{- /*
+  Resolves an image reference to a Hugo resource.
+
+  Accepts a dict with:
+    page  (optional) — the page whose bundle resources should be searched first
+    path            — a page-resource name, an assets path, or `images/…`
+
+  Returns the resource, or nothing when the path is remote, absolute or missing.
+*/ -}}
+
+{{- $page := .page -}}
+{{- $path := .path -}}
+{{- $found := false -}}
+{{- $out := "" -}}
+
+{{- if and $path (not (or (hasPrefix $path "http") (hasPrefix $path "/"))) -}}
+  {{- with $page -}}
+    {{- with .Resources.GetMatch $path -}}
+      {{- $out = . -}}
+      {{- $found = true -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if not $found -}}
+    {{- with resources.Get $path -}}
+      {{- $out = . -}}
+      {{- $found = true -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if not $found -}}
+    {{- with resources.Get (printf "images/%s" $path) -}}
+      {{- $out = . -}}
+      {{- $found = true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* One exit point: an empty string when nothing resolved, which callers
+       can test with `with` or `if`. */ -}}
+{{- return $out -}}

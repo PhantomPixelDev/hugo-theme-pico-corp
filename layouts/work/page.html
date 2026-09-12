@@ -1,0 +1,156 @@
+{{ define "main" }}
+  <header class="case-hero">
+    <div class="container">
+      <div class="page-header__breadcrumbs">{{ partial "breadcrumbs.html" . }}</div>
+      {{ with .Params.category }}<span class="eyebrow">{{ . }}</span>{{ end }}
+      <h1 class="page-header__title">{{ .Title }}</h1>
+      {{ with or .Params.lead .Description }}
+        <p class="page-header__lead">{{ . | markdownify }}</p>
+      {{ end }}
+
+      {{ with .Params.image }}
+        <div class="case-hero__media">
+          {{ partial "utils/image.html" (dict
+            "page" $
+            "path" .
+            "alt" ($.Params.imageAlt | default "")
+            "sizes" "(min-width: 72rem) 68rem, 100vw"
+            "priority" true) }}
+        </div>
+      {{ end }}
+    </div>
+  </header>
+
+  <div class="container">
+    <dl class="case-facts">
+      {{ with .Params.client }}
+        <div class="case-facts__item"><dt>{{ i18n "client" }}</dt><dd>{{ . }}</dd></div>
+      {{ end }}
+      {{ with .Params.industry }}
+        <div class="case-facts__item"><dt>{{ i18n "industry" }}</dt><dd>{{ . }}</dd></div>
+      {{ end }}
+      {{ with .Params.category }}
+        <div class="case-facts__item"><dt>{{ i18n "discipline" }}</dt><dd>{{ . }}</dd></div>
+      {{ end }}
+      {{ with .Params.year }}
+        <div class="case-facts__item"><dt>{{ i18n "year" }}</dt><dd>{{ . }}</dd></div>
+      {{ end }}
+      {{ with .Params.duration }}
+        <div class="case-facts__item"><dt>{{ i18n "duration" }}</dt><dd>{{ . }}</dd></div>
+      {{ end }}
+    </dl>
+  </div>
+
+  <section class="section">
+    <div class="container split split--aside split--sticky">
+      <div>
+        {{ with .Params.challenge }}
+          <div class="case-block">
+            <p class="case-block__label">{{ i18n "challenge" }}</p>
+            <div class="case-block__body">{{ . | markdownify }}</div>
+          </div>
+        {{ end }}
+
+        {{ with .Params.solution }}
+          <div class="case-block">
+            <p class="case-block__label">{{ i18n "solution" }}</p>
+            <div class="case-block__body">{{ . | markdownify }}</div>
+          </div>
+        {{ end }}
+
+        {{ with .Content }}
+          <div class="case-block">
+            <div class="case-block__body prose prose--wide prose--lede">{{ . }}</div>
+          </div>
+        {{ end }}
+
+        {{ with .Params.results }}
+          <div class="case-block">
+            <p class="case-block__label">{{ i18n "results" }}</p>
+            <ul class="case-results">
+              {{ range . }}<li>{{ . }}</li>{{ end }}
+            </ul>
+          </div>
+        {{ end }}
+      </div>
+
+      <aside class="case-sidebar">
+        {{ with .Params.stats }}
+          <h2 class="case-sidebar__heading">{{ i18n "impact" }}</h2>
+          <ul class="stats">
+            {{ range . }}
+              <li class="stat">
+                <span class="stat__value">{{ .value }}</span>
+                <span class="stat__label">{{ .label }}</span>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+
+        {{ with .Params.technologies }}
+          <h2 class="case-sidebar__heading">{{ i18n "technologies" }}</h2>
+          <ul class="tag-list">
+            {{ range . }}<li><span class="badge">{{ . }}</span></li>{{ end }}
+          </ul>
+        {{ end }}
+
+        {{ with .Params.services }}
+          <h2 class="case-sidebar__heading">{{ i18n "servicesUsed" }}</h2>
+          <ul class="site-footer__list">
+            {{ range . }}
+              {{ with site.GetPage . }}
+                <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+              {{ end }}
+            {{ end }}
+          </ul>
+        {{ end }}
+
+        {{ with .Params.testimonial }}
+          <h2 class="case-sidebar__heading">{{ i18n "clientWords" }}</h2>
+          <figure class="testimonial">
+            <blockquote class="testimonial__quote">{{ .quote }}</blockquote>
+            <figcaption class="testimonial__footer">
+              <span class="testimonial__name">{{ .name }}</span>
+              <span class="testimonial__role">{{ .role }}</span>
+            </figcaption>
+          </figure>
+        {{ end }}
+      </aside>
+    </div>
+  </section>
+
+  {{ with .Params.gallery }}
+    <section class="section section--muted">
+      <div class="container">
+        {{ partial "utils/section-head.html" (dict "title" (i18n "gallery")) }}
+        <ul class="gallery">
+          {{ range . }}
+            <li class="gallery__item">
+              {{ partial "utils/image.html" (dict
+                "page" $
+                "path" .image
+                "alt" (.alt | default "")
+                "sizes" "(min-width: 56rem) 33vw, 100vw"
+                "widths" (slice 480 768 1200)) }}
+              {{ with .caption }}<p class="gallery__caption">{{ . }}</p>{{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      </div>
+    </section>
+  {{ end }}
+
+  {{ $related := partial "utils/related-work.html" . }}
+  {{ with $related }}
+    <section class="related">
+      <div class="container">
+        {{ partial "utils/section-head.html" (dict "title" (i18n "relatedProjects")) }}
+        <div class="grid-auto grid-auto--wide grid-auto--gap-lg">
+          {{ range . }}{{ partial "cards/project-card.html" . }}{{ end }}
+        </div>
+      </div>
+    </section>
+  {{ end }}
+
+  {{ partial "cta.html" . }}
+{{ end }}

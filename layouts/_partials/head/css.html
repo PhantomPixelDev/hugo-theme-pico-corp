@@ -1,0 +1,45 @@
+{{- /*
+  One stylesheet: vendored Pico first, then the theme layers in cascade order.
+  01-brand.css is executed as a template so brand colour and radius come from
+  site parameters. Development skips minification and fingerprinting to keep
+  rebuilds fast.
+*/ -}}
+
+{{- $stack := slice -}}
+
+{{- with resources.Get "css/pico.min.css" -}}
+  {{- $stack = $stack | append . -}}
+{{- else -}}
+  {{- errorf "pico-corp: css/pico.min.css is missing from the theme assets" -}}
+{{- end -}}
+
+{{- with resources.Get "css/theme/00-tokens.css" -}}
+  {{- $stack = $stack | append . -}}
+{{- end -}}
+
+{{- /* Brand layer follows the tokens it overrides. */ -}}
+{{- with resources.Get "css/theme/01-brand.css" -}}
+  {{- $stack = $stack | append (. | resources.ExecuteAsTemplate "css/theme/brand.css" site.Params) -}}
+{{- end -}}
+
+{{- range slice "10-base" "20-layout" "30-header" "40-components" "50-sections" "60-pages" -}}
+  {{- $path := printf "css/theme/%s.css" . -}}
+  {{- with resources.Get $path -}}
+    {{- $stack = $stack | append . -}}
+  {{- else -}}
+    {{- errorf "pico-corp: missing stylesheet %q" $path -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with resources.Get "css/custom.css" -}}
+  {{- /* Optional project override: create assets/css/custom.css in your site. */ -}}
+  {{- $stack = $stack | append . -}}
+{{- end -}}
+
+{{- $css := $stack | resources.Concat "css/pico-corp.css" -}}
+{{- if hugo.IsProduction -}}
+  {{- $css = $css | minify | fingerprint "sha256" -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" />
+{{- else -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" />
+{{- end -}}

@@ -1,0 +1,58 @@
+name = "Pico Corp"
+license = "MIT"
+licenselink = "https://github.com/PhantomPixelDev/hugo-theme-pico-corp/blob/main/LICENSE"
+description = "A minimal, premium corporate and agency theme built on Pico CSS 2. Editorial typography from the system serif stack with monospaced metadata, composable page sections, a case-study system, services, a journal and a contact form. Light and dark schemes, WCAG 2.2 AA in mind, one stylesheet and under 2 KB of vanilla JavaScript. No build step, no framework, no webfont requests."
+homepage = "https://github.com/PhantomPixelDev/hugo-theme-pico-corp"
+demosite = "https://phantompixeldev.github.io/hugo-theme-pico-corp/"
+min_version = "0.146.0"
+
+tags = [
+  "corporate",
+  "agency",
+  "business",
+  "company",
+  "consulting",
+  "studio",
+  "portfolio",
+  "case-studies",
+  "services",
+  "blog",
+  "pico",
+  "picocss",
+  "minimal",
+  "editorial",
+  "serif",
+  "dark-mode",
+  "accessibility",
+  "wcag",
+  "responsive",
+  "seo",
+  "no-js-required",
+]
+
+features = [
+  "corporate",
+  "agency",
+  "portfolio",
+  "case-studies",
+  "services",
+  "blog",
+  "contact-form",
+  "dark-mode",
+  "responsive",
+  "taxonomies",
+  "pagination",
+  "table-of-contents",
+  "syntax-highlighting",
+  "shortcodes",
+  "seo",
+  "open-graph",
+  "json-ld",
+  "rss",
+  "accessible",
+  "multilingual-ready",
+]
+
+[author]
+  name = "PhantomPixelDev"
+  homepage = "https://github.com/PhantomPixelDev"

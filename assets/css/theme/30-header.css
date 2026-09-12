@@ -1,0 +1,445 @@
+/* ==========================================================================
+   Site chrome
+   Announcement bar, header, navigation, mobile panel, footer.
+   ========================================================================== */
+
+/* ---- Announcement bar -------------------------------------------------- */
+
+.announcement {
+  background-color: var(--pc-bg-sunken);
+  color: var(--pc-text-muted);
+  border-block-end: var(--pc-border);
+  font-size: var(--pc-text-sm);
+}
+
+.announcement__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pc-space-2xs) var(--pc-space-sm);
+  padding-block: 0.6rem;
+  text-align: center;
+}
+
+.announcement p {
+  margin: 0;
+}
+
+.announcement a {
+  color: var(--pc-text);
+  font-weight: var(--pc-weight-medium);
+  text-decoration-color: var(--pc-accent-line);
+  white-space: nowrap;
+}
+
+.announcement a:hover {
+  color: var(--pc-accent);
+  text-decoration-color: currentColor;
+}
+
+/* ---- Header ------------------------------------------------------------ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: color-mix(in srgb, var(--pc-bg) 94%, transparent);
+  backdrop-filter: blur(12px);
+  border-block-end: 1px solid transparent;
+  transition: border-color var(--pc-duration) var(--pc-ease),
+    box-shadow var(--pc-duration) var(--pc-ease);
+}
+
+.site-header.is-stuck {
+  border-block-end-color: var(--pc-border-color);
+  box-shadow: var(--pc-shadow-sm);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pc-space-md);
+  min-height: 4.25rem;
+}
+
+/* ---- Brand ------------------------------------------------------------- */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--pc-text-md);
+  font-weight: var(--pc-weight-semibold);
+  letter-spacing: var(--pc-tracking-tight);
+  color: var(--pc-text);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand:hover {
+  color: var(--pc-text);
+}
+
+.brand__mark {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--pc-radius-sm);
+  background-color: var(--pc-accent);
+  color: var(--pc-on-accent);
+  flex-shrink: 0;
+}
+
+.brand__mark svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.brand__logo {
+  height: 1.75rem;
+  width: auto;
+}
+
+/* ---- Desktop navigation ------------------------------------------------ */
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--pc-space-md);
+}
+
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--pc-space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav__link {
+  display: inline-block;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--pc-radius-sm);
+  color: var(--pc-text-muted);
+  font-size: var(--pc-text-sm);
+  font-weight: var(--pc-weight-medium);
+  text-decoration: none;
+}
+
+.site-nav__link:hover {
+  color: var(--pc-text);
+  background-color: var(--pc-bg-muted);
+}
+
+.site-nav__link[aria-current="page"] {
+  color: var(--pc-text);
+}
+
+.site-nav__link[aria-current="page"]::after {
+  content: "";
+  display: block;
+  height: 2px;
+  margin-block-start: 0.2rem;
+  border-radius: 2px;
+  background-color: var(--pc-accent);
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--pc-space-2xs);
+}
+
+/* ---- Icon buttons ------------------------------------------------------ */
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  margin: 0;
+  border: var(--pc-border);
+  border-radius: var(--pc-radius-sm);
+  background: none;
+  color: var(--pc-text-muted);
+  cursor: pointer;
+  transition: color var(--pc-duration-fast) var(--pc-ease),
+    background-color var(--pc-duration-fast) var(--pc-ease),
+    border-color var(--pc-duration-fast) var(--pc-ease);
+}
+
+.icon-button:hover {
+  color: var(--pc-text);
+  background-color: var(--pc-bg-muted);
+  border-color: var(--pc-border-strong);
+}
+
+.icon-button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* Scheme toggle: the effective scheme is reflected on the button so the
+   correct icon shows without a second round trip to JavaScript. */
+.scheme-toggle__icon--dark {
+  display: none;
+}
+
+.scheme-toggle[data-scheme="dark"] .scheme-toggle__icon--light {
+  display: none;
+}
+
+.scheme-toggle[data-scheme="dark"] .scheme-toggle__icon--dark {
+  display: block;
+}
+
+/* Before JavaScript runs, follow the system preference. */
+@media (prefers-color-scheme: dark) {
+  .scheme-toggle:not([data-scheme]) .scheme-toggle__icon--light {
+    display: none;
+  }
+
+  .scheme-toggle:not([data-scheme]) .scheme-toggle__icon--dark {
+    display: block;
+  }
+}
+
+/* ---- Mobile navigation ------------------------------------------------- */
+
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle__bars {
+  position: relative;
+  width: 1.05rem;
+  height: 2px;
+  border-radius: 2px;
+  background-color: currentColor;
+  transition: background-color var(--pc-duration-fast) var(--pc-ease);
+}
+
+.nav-toggle__bars::before,
+.nav-toggle__bars::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  border-radius: 2px;
+  background-color: currentColor;
+  transition: transform var(--pc-duration) var(--pc-ease);
+}
+
+.nav-toggle__bars::before {
+  transform: translateY(-6px);
+}
+
+.nav-toggle__bars::after {
+  transform: translateY(6px);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars {
+  background-color: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars::before {
+  transform: rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars::after {
+  transform: rotate(-45deg);
+}
+
+.mobile-nav {
+  display: none;
+  border-block-start: var(--pc-border);
+  background-color: var(--pc-bg);
+  max-height: calc(100dvh - 4.25rem);
+  overflow-y: auto;
+}
+
+.mobile-nav__list {
+  margin: 0;
+  padding: var(--pc-space-sm) 0 var(--pc-space-md);
+  list-style: none;
+}
+
+.mobile-nav__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0;
+  border-block-end: var(--pc-border);
+  color: var(--pc-text);
+  font-size: var(--pc-text-md);
+  font-weight: var(--pc-weight-medium);
+  text-decoration: none;
+}
+
+.mobile-nav__link[aria-current="page"] {
+  color: var(--pc-accent);
+}
+
+.mobile-nav__link .icon {
+  color: var(--pc-text-muted);
+  transition: transform var(--pc-duration-fast) var(--pc-ease);
+}
+
+.mobile-nav__link:hover .icon {
+  color: var(--pc-accent);
+  transform: translateX(3px);
+}
+
+.mobile-nav__cta {
+  margin-block-start: var(--pc-space-md);
+}
+
+.mobile-nav__cta .button {
+  width: 100%;
+}
+
+@media (max-width: 55.999rem) {
+  .site-nav {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: inline-grid;
+  }
+
+  .mobile-nav[data-open="true"] {
+    display: block;
+  }
+}
+
+/* ---- Footer ------------------------------------------------------------ */
+
+.site-footer {
+  margin-block-start: auto;
+  border-block-start: var(--pc-border);
+  background-color: var(--pc-bg-muted);
+  padding-block: var(--pc-space-2xl) var(--pc-space-lg);
+  font-size: var(--pc-text-sm);
+}
+
+.site-footer__top {
+  display: grid;
+  gap: var(--pc-space-xl);
+}
+
+@media (min-width: 48rem) {
+  .site-footer__top {
+    grid-template-columns: minmax(0, 1.4fr) repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--pc-space-lg);
+  }
+}
+
+.site-footer__about p {
+  color: var(--pc-text-muted);
+  max-width: 34ch;
+  margin-block: var(--pc-space-sm) 0;
+}
+
+.site-footer__heading {
+  font-size: var(--pc-text-xs);
+  font-weight: var(--pc-weight-semibold);
+  letter-spacing: var(--pc-tracking-wide);
+  text-transform: uppercase;
+  color: var(--pc-text);
+  margin-block-end: var(--pc-space-xs);
+}
+
+.site-footer__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__list li + li {
+  margin-block-start: 0.45rem;
+}
+
+.site-footer__list a,
+.site-footer__contact a {
+  color: var(--pc-text-muted);
+  text-decoration: none;
+}
+
+.site-footer__list a:hover,
+.site-footer__contact a:hover {
+  color: var(--pc-text);
+  text-decoration: underline;
+}
+
+.site-footer__contact {
+  margin: 0;
+  color: var(--pc-text-muted);
+}
+
+.site-footer__contact dt {
+  font-weight: var(--pc-weight-medium);
+  color: var(--pc-text);
+  margin-block-start: var(--pc-space-xs);
+}
+
+/* Browsers indent dd by default; the footer column is too narrow for it. */
+.site-footer__contact dd {
+  margin: 0.1rem 0 0;
+}
+
+.site-footer__contact dt:first-child {
+  margin-block-start: 0;
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pc-space-sm);
+  margin-block-start: var(--pc-space-2xl);
+  padding-block-start: var(--pc-space-md);
+  border-block-start: var(--pc-border);
+  color: var(--pc-text-muted);
+}
+
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-xs) var(--pc-space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-links {
+  display: flex;
+  gap: var(--pc-space-3xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-links a {
+  display: grid;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: var(--pc-radius-sm);
+  color: var(--pc-text-muted);
+}
+
+.social-links a:hover {
+  color: var(--pc-text);
+  background-color: var(--pc-bg-sunken);
+}
+
+.social-links svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}

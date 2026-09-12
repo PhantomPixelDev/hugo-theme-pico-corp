@@ -1,0 +1,104 @@
+{{ define "main" }}
+  <article class="article">
+    <div class="container">
+      <header class="article__header">
+        <div class="page-header__breadcrumbs">{{ partial "breadcrumbs.html" . }}</div>
+        <h1>{{ .Title }}</h1>
+        {{ with or .Params.lead .Description }}
+          <p class="page-header__lead">{{ . | markdownify }}</p>
+        {{ end }}
+        <p class="article__meta">
+          {{ with .GetTerms "categories" }}
+            <a href="{{ (index . 0).RelPermalink }}" class="badge badge--accent">{{ (index . 0).LinkTitle }}</a>
+          {{ end }}
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "utils/date.html" .Date }}</time>
+          {{ if site.Params.showReadingTime | default true }}
+            <span>{{ i18n "readingTime" .ReadingTime }}</span>
+          {{ end }}
+          {{ with .Params.author }}<span>{{ i18n "byAuthor" }} {{ . }}</span>{{ end }}
+        </p>
+      </header>
+
+      {{ with .Params.image }}
+        <figure class="article__cover">
+          {{ partial "utils/image.html" (dict
+            "page" $
+            "path" .
+            "alt" ($.Params.imageAlt | default "")
+            "sizes" "(min-width: 72rem) 68rem, 100vw"
+            "priority" true) }}
+        </figure>
+      {{ end }}
+
+      <div class="split split--aside split--sticky">
+        <div class="prose prose--lede">
+          {{ .Content }}
+        </div>
+
+        <aside class="stack-lg">
+          {{ if and .Params.toc (gt (len .TableOfContents) 60) }}
+            <nav class="toc" aria-labelledby="toc-heading">
+              <p class="toc__heading" id="toc-heading">{{ i18n "onThisPage" }}</p>
+              {{ .TableOfContents }}
+            </nav>
+          {{ end }}
+
+          {{ with .Params.author }}
+            <div class="case-sidebar">
+              <h2 class="case-sidebar__heading">{{ i18n "author" }}</h2>
+              {{ $author := index (hugo.Data.authors | default dict) . }}
+              <div class="author">
+                {{ with $author }}
+                  {{ with .image }}
+                    {{ $img := partial "utils/resolve-image.html" (dict "path" .) }}
+                    {{ with $img }}
+                      {{ $avatar := .Fill "160x160 Center" }}
+                      <img class="author__avatar" src="{{ $avatar.RelPermalink }}" width="80" height="80"
+                        alt="" loading="lazy" />
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+                <div>
+                  <span class="author__name">{{ . }}</span>
+                  {{ with $author }}
+                    {{ with .role }}<br /><span class="author__role">{{ . }}</span>{{ end }}
+                  {{ end }}
+                </div>
+              </div>
+              {{ with $author }}
+                {{ with .bio }}<p class="muted"><small>{{ . }}</small></p>{{ end }}
+              {{ end }}
+            </div>
+          {{ end }}
+
+          {{ with .GetTerms "tags" }}
+            <div>
+              <h2 class="case-sidebar__heading">{{ i18n "tags" }}</h2>
+              <ul class="tag-list">
+                {{ range . }}
+                  <li><a href="{{ .RelPermalink }}"><span class="badge">{{ .LinkTitle }}</span></a></li>
+                {{ end }}
+              </ul>
+            </div>
+          {{ end }}
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  {{ if site.Params.showRelated | default true }}
+    {{ $related := first 3 (where (site.RegularPages.Related .) "Type" "blog") }}
+    {{ with $related }}
+      <section class="related">
+        <div class="container">
+          {{ partial "utils/section-head.html" (dict "title" (i18n "relatedArticles")) }}
+          <div class="grid-auto grid-auto--gap-lg">
+            {{ range . }}{{ partial "cards/post-card.html" . }}{{ end }}
+          </div>
+        </div>
+      </section>
+    {{ end }}
+  {{ end }}
+
+  {{ partial "cta.html" . }}
+{{ end }}

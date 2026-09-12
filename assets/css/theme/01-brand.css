@@ -1,0 +1,52 @@
+{{- /* Generated from site parameters. See params.primaryColor, params.primaryColorDark
+       and params.radius in hugo.toml. Executed as a Hugo template, so keep the Go
+       actions intact if you edit this file. */ -}}
+{{- $light := .primaryColor | default "#0f4c81" -}}
+{{- $dark := .primaryColorDark | default "#8cc0ea" -}}
+{{- $radius := .radius | default "0.5rem" -}}
+{{- $headingFont := .headingFont | default "serif" -}}
+
+/* ==========================================================================
+   Brand
+   ========================================================================== */
+
+:root {
+  --pc-radius: {{ $radius }};
+{{ if eq $headingFont "sans" }}
+  /* params.headingFont = "sans" */
+  --pc-font-display: var(--pc-font-sans);
+  --pc-tracking-tight: -0.021em;
+  --pc-tracking-snug: -0.012em;
+  --pc-weight-display: 600;
+{{ end }}
+  --pc-accent: {{ $light }};
+  --pc-accent-hover: color-mix(in srgb, var(--pc-accent) 86%, #000);
+  --pc-accent-quiet: color-mix(in srgb, var(--pc-accent) 8%, var(--pc-bg));
+  --pc-accent-line: color-mix(in srgb, var(--pc-accent) 28%, var(--pc-border-color));
+  --pc-on-accent: #ffffff;
+
+  --pico-primary: var(--pc-accent);
+  --pico-primary-background: var(--pc-accent);
+  --pico-primary-border: var(--pc-accent);
+  --pico-primary-underline: color-mix(in srgb, var(--pc-accent) 36%, transparent);
+  --pico-primary-hover: var(--pc-accent-hover);
+  --pico-primary-hover-background: var(--pc-accent-hover);
+  --pico-primary-hover-border: var(--pc-accent-hover);
+  --pico-primary-hover-underline: var(--pc-accent-hover);
+  --pico-primary-focus: var(--pc-focus-color);
+  --pico-primary-inverse: var(--pc-on-accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pc-accent: {{ $dark }};
+    --pc-accent-hover: color-mix(in srgb, var(--pc-accent) 88%, #fff);
+    --pc-on-accent: #0b1014;
+  }
+}
+
+[data-theme="dark"] {
+  --pc-accent: {{ $dark }};
+  --pc-accent-hover: color-mix(in srgb, var(--pc-accent) 88%, #fff);
+  --pc-on-accent: #0b1014;
+}

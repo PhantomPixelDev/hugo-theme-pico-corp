@@ -1,0 +1,26 @@
+{{- /*
+  Renders the composable `sections` list from a page's front matter:
+
+      sections:
+        - type: hero
+          title: "…"
+        - type: services
+          limit: 6
+
+  Each entry's `type` maps to _partials/sections/<type>.html and receives
+  { page, cfg }. An unknown type fails the build with a clear message rather
+  than silently dropping content.
+*/ -}}
+{{- $page := . -}}
+{{- range $page.Params.sections -}}
+  {{- $type := .type -}}
+  {{- if not $type -}}
+    {{- errorf "pico-corp: a section in %q has no `type`" $page.Path -}}
+  {{- end -}}
+  {{- $name := printf "sections/%s.html" $type -}}
+  {{- if templates.Exists (printf "_partials/%s" $name) -}}
+    {{- partial $name (dict "page" $page "cfg" .) -}}
+  {{- else -}}
+    {{- errorf "pico-corp: unknown section type %q in %q" $type $page.Path -}}
+  {{- end -}}
+{{- end -}}

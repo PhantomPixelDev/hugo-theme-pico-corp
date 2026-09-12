@@ -1,0 +1,30 @@
+{{- /* Trusted-by row. cfg: title, tone, data (default "clients").
+       Each data entry: { name, logo (optional) } — with no logo the client
+       name is set as a wordmark, which keeps the demo free of fake brands. */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "clients")) -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" (merge $cfg (dict "tight" true)) }}">
+    <div class="container">
+      {{ with $cfg.title }}
+        <p class="text-center muted"><small>{{ . }}</small></p>
+      {{ end }}
+      <ul class="logo-wall">
+        {{ range . }}
+          {{ $item := . }}
+          <li class="logo-wall__item">
+            {{ if $item.logo }}
+              {{ $logo := partial "utils/resolve-image.html" (dict "path" $item.logo) }}
+              <img
+                src="{{ if $logo }}{{ $logo.RelPermalink }}{{ else }}{{ $item.logo | relURL }}{{ end }}"
+                alt="{{ $item.name }}"
+                loading="lazy" />
+            {{ else }}
+              {{ $item.name }}
+            {{ end }}
+          </li>
+        {{ end }}
+      </ul>
+    </div>
+  </section>
+{{- end -}}

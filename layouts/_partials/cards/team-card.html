@@ -1,0 +1,18 @@
+{{- /* Team member card. Expects a dict from data/team.yaml:
+       { name, role, image, bio, link } */ -}}
+<article class="team-card">
+  {{ with .image }}
+    <div class="team-card__media">
+      {{ partial "utils/image.html" (dict
+        "path" .
+        "alt" (printf "%s, %s" ($.name | default "") ($.role | default ""))
+        "sizes" "(min-width: 56rem) 22vw, 50vw"
+        "widths" (slice 320 480 640)) }}
+    </div>
+  {{ end }}
+  <h3 class="team-card__name">
+    {{ with .link }}<a href="{{ . }}" rel="noopener">{{ $.name }}</a>{{ else }}{{ .name }}{{ end }}
+  </h3>
+  {{ with .role }}<p class="team-card__role">{{ . }}</p>{{ end }}
+  {{ with .bio }}<p class="team-card__bio">{{ . }}</p>{{ end }}
+</article>

@@ -1,0 +1,74 @@
+{{- $address := site.Params.address -}}
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__about">
+        <a class="brand" href="{{ site.Home.RelPermalink }}">
+          <span class="brand__mark" aria-hidden="true">{{ partial "utils/icon.html" "star" }}</span>
+          <span>{{ site.Params.companyName | default site.Title }}</span>
+        </a>
+        {{ with site.Params.footer.text }}<p>{{ . }}</p>{{ end }}
+      </div>
+
+      {{- /* Footer columns are built from the footer menu, grouped by the
+             `group` menu parameter so editors control them from configuration. */ -}}
+      {{ $groups := slice }}
+      {{ range site.Menus.footer }}
+        {{ $group := .Params.group | default (i18n "links") }}
+        {{ if not (in $groups $group) }}{{ $groups = $groups | append $group }}{{ end }}
+      {{ end }}
+      {{ range $groups }}
+        {{ $group := . }}
+        <div>
+          <h2 class="site-footer__heading">{{ $group }}</h2>
+          <ul class="site-footer__list">
+            {{ range site.Menus.footer }}
+              {{ if eq (.Params.group | default (i18n "links")) $group }}
+                <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+              {{ end }}
+            {{ end }}
+          </ul>
+        </div>
+      {{ end }}
+
+      <div>
+        <h2 class="site-footer__heading">{{ i18n "getInTouch" }}</h2>
+        <dl class="site-footer__contact">
+          {{ with site.Params.email }}
+            <dt>{{ i18n "email" }}</dt>
+            <dd><a href="mailto:{{ . }}">{{ . }}</a></dd>
+          {{ end }}
+          {{ with site.Params.phone }}
+            <dt>{{ i18n "phone" }}</dt>
+            <dd><a href="tel:{{ site.Params.phoneHref | default . }}">{{ . }}</a></dd>
+          {{ end }}
+          {{ with $address }}
+            <dt>{{ i18n "studio" }}</dt>
+            <dd>
+              {{ with .street }}{{ . }}<br />{{ end }}
+              {{ with .postalCode }}{{ . }} {{ end }}{{ with .city }}{{ . }}{{ end }}
+            </dd>
+          {{ end }}
+        </dl>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div>
+        <p>
+          &copy; {{ now.Year }} {{ site.Params.legalName | default site.Params.companyName | default site.Title }}.
+          {{ i18n "allRightsReserved" }}
+        </p>
+        {{ with site.Params.footer.note }}<p class="muted"><small>{{ . }}</small></p>{{ end }}
+      </div>
+
+      <ul class="site-footer__legal">
+        {{ range site.Menus.legal }}
+          <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+        {{ end }}
+      </ul>
+
+      {{ partial "social-links.html" . }}
+    </div>
+  </div>
+</footer>

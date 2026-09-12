@@ -1,0 +1,19 @@
+{{- /* Renders one icon from the inlined sprite.
+
+  Usage: {{ partial "utils/icon.html" "code" }}
+         {{ partial "utils/icon.html" (dict "name" "code" "class" "foo") }}
+
+  Icons are decorative by default; give the surrounding control a text label or
+  an aria-label instead of labelling the icon itself. */ -}}
+
+{{- $name := "" -}}
+{{- $class := "" -}}
+{{- if reflect.IsMap . -}}
+  {{- $name = .name -}}
+  {{- $class = .class | default "" -}}
+{{- else -}}
+  {{- $name = . -}}
+{{- end -}}
+{{- with $name -}}
+  <svg class="icon{{ with $class }} {{ . }}{{ end }}" aria-hidden="true" focusable="false"><use href="#i-{{ . }}"></use></svg>
+{{- end -}}

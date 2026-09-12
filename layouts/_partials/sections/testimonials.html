@@ -1,0 +1,30 @@
+{{- /* Testimonials. cfg: eyebrow, title, lead, tone, limit, lead_first (render
+       the first quote larger), data (default "testimonials").
+       Each entry: { quote, name, role, company } */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "testimonials")) -}}
+{{- with $cfg.limit }}{{ $items = first . $items }}{{ end -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+      <div class="grid-auto grid-auto--wide grid-auto--gap-lg">
+        {{ range . }}
+          <figure class="testimonial">
+            <blockquote class="testimonial__quote">{{ .quote }}</blockquote>
+            <figcaption class="testimonial__footer">
+              <span class="testimonial__name">{{ .name }}</span>
+              <span class="testimonial__role">
+                {{- with .role }}{{ . }}{{ end }}{{ with .company }}, {{ . }}{{ end -}}
+              </span>
+            </figcaption>
+          </figure>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+{{- end -}}

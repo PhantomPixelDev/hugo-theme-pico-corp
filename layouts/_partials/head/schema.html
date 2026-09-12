@@ -1,0 +1,92 @@
+{{- /* Structured data, kept to what search engines actually use for a
+       corporate site: the organisation, article metadata and breadcrumbs. */ -}}
+
+{{- $orgID := printf "%s#organization" site.Home.Permalink -}}
+{{- $nodes := slice -}}
+
+{{- /* ---- Organization ------------------------------------------------- */ -}}
+{{- $org := dict
+  "@type" (site.Params.seo.organizationType | default "Organization")
+  "@id" $orgID
+  "name" (site.Params.companyName | default site.Title)
+  "url" site.Home.Permalink
+-}}
+{{- with site.Params.legalName }}{{ $org = merge $org (dict "legalName" .) }}{{ end -}}
+{{- with site.Params.description }}{{ $org = merge $org (dict "description" .) }}{{ end -}}
+{{- with site.Params.email }}{{ $org = merge $org (dict "email" .) }}{{ end -}}
+{{- with site.Params.phone }}{{ $org = merge $org (dict "telephone" .) }}{{ end -}}
+{{- with site.Params.founded }}{{ $org = merge $org (dict "foundingDate" (printf "%v" .)) }}{{ end -}}
+
+{{- with site.Params.address -}}
+  {{- $org = merge $org (dict "address" (dict
+    "@type" "PostalAddress"
+    "streetAddress" (.street | default "")
+    "postalCode" (.postalCode | default "")
+    "addressLocality" (.city | default "")
+    "addressRegion" (.region | default "")
+    "addressCountry" (.countryCode | default .country | default "")
+  )) -}}
+{{- end -}}
+
+{{- $sameAs := slice -}}
+{{- range site.Params.social -}}
+  {{- if and .url (hasPrefix .url "http") -}}
+    {{- $sameAs = $sameAs | append .url -}}
+  {{- end -}}
+{{- end -}}
+{{- with $sameAs }}{{ $org = merge $org (dict "sameAs" .) }}{{ end -}}
+
+{{- with partial "utils/resolve-image.html" (dict "path" site.Params.ogImage) -}}
+  {{- $org = merge $org (dict "image" .Permalink) -}}
+{{- end -}}
+
+{{- $nodes = $nodes | append $org -}}
+
+{{- /* ---- Article ------------------------------------------------------- */ -}}
+{{- if and .IsPage (eq .Type "blog") -}}
+  {{- $article := dict
+    "@type" "Article"
+    "headline" (.Title | plainify)
+    "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+    "url" .Permalink
+    "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+    "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+    "publisher" (dict "@id" $orgID)
+    "wordCount" .WordCount
+  -}}
+  {{- with .Description }}{{ $article = merge $article (dict "description" (. | plainify)) }}{{ end -}}
+  {{- with .Params.author -}}
+    {{- $article = merge $article (dict "author" (dict "@type" "Person" "name" .)) -}}
+  {{- else -}}
+    {{- $article = merge $article (dict "author" (dict "@id" $orgID)) -}}
+  {{- end -}}
+  {{- with partial "utils/resolve-image.html" (dict "page" . "path" (or .Params.image site.Params.ogImage)) -}}
+    {{- $article = merge $article (dict "image" .Permalink) -}}
+  {{- end -}}
+  {{- with .GetTerms "categories" -}}
+    {{- $article = merge $article (dict "articleSection" (index . 0).LinkTitle) -}}
+  {{- end -}}
+  {{- $keywords := slice -}}
+  {{- range .GetTerms "tags" }}{{ $keywords = $keywords | append .LinkTitle }}{{ end -}}
+  {{- with $keywords }}{{ $article = merge $article (dict "keywords" (delimit . ", ")) }}{{ end -}}
+  {{- $nodes = $nodes | append $article -}}
+{{- end -}}
+
+{{- /* ---- BreadcrumbList ------------------------------------------------ */ -}}
+{{- $trail := partial "utils/breadcrumb-trail.html" . -}}
+{{- if gt (len $trail) 1 -}}
+  {{- $items := slice -}}
+  {{- range $i, $crumb := $trail -}}
+    {{- $items = $items | append (dict
+      "@type" "ListItem"
+      "position" (add $i 1)
+      "name" ($crumb.title | plainify)
+      "item" $crumb.url
+    ) -}}
+  {{- end -}}
+  {{- $nodes = $nodes | append (dict "@type" "BreadcrumbList" "itemListElement" $items) -}}
+{{- end -}}
+
+<script type="application/ld+json">
+  {{ dict "@context" "https://schema.org" "@graph" $nodes | jsonify (dict "indent" "  ") | safeJS }}
+</script>

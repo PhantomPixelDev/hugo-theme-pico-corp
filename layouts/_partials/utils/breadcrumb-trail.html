@@ -1,0 +1,10 @@
+{{- /* Returns the breadcrumb trail for a page as a slice of dicts
+       { title, url }, ordered from the home page to the current page.
+       Shared by the breadcrumbs partial and the BreadcrumbList schema. */ -}}
+
+{{- $trail := slice -}}
+{{- range .Ancestors.Reverse -}}
+  {{- $trail = $trail | append (dict "title" (or .LinkTitle .Title (i18n "home")) "url" .Permalink) -}}
+{{- end -}}
+{{- $trail = $trail | append (dict "title" (or .LinkTitle .Title) "url" .Permalink) -}}
+{{- return $trail -}}

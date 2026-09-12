@@ -1,0 +1,31 @@
+{{- /* Service card. Expects a service page, or a dict { page, headingLevel }.
+       headingLevel is "h3" by default, which is correct inside a section that
+       has its own h2; listing pages pass "h2" so no level is skipped. */ -}}
+{{- $page := . -}}
+{{- $level := "h3" -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = .page -}}
+  {{- $level = .headingLevel | default "h3" -}}
+{{- end -}}
+<article class="service-card">
+  {{ with $page.Params.icon }}
+    <span class="service-card__icon">{{ partial "utils/icon.html" . }}</span>
+  {{ end }}
+  {{ if eq $level "h2" }}
+    <h2 class="service-card__title">
+      <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
+    </h2>
+  {{ else }}
+    <h3 class="service-card__title">
+      <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
+    </h3>
+  {{ end }}
+  {{ with or $page.Params.summary $page.Description }}
+    <p class="service-card__text">{{ . }}</p>
+  {{ end }}
+  {{ with $page.Params.highlights }}
+    <ul class="service-card__list">
+      {{ range first 3 . }}<li>{{ . }}</li>{{ end }}
+    </ul>
+  {{ end }}
+</article>

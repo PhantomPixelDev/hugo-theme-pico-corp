@@ -1,0 +1,17 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  <section class="section">
+    <div class="container stack-lg">
+      {{ with .Content }}<div class="prose prose--wide">{{ . }}</div>{{ end }}
+      <div class="grid-auto grid-auto--gap-lg">
+        {{ range .RegularPages }}
+          {{ partial "cards/service-card.html" (dict "page" . "headingLevel" "h2") }}
+        {{ end }}
+      </div>
+    </div>
+  </section>
+
+  {{ partial "utils/sections.html" . }}
+  {{ partial "cta.html" . }}
+{{ end }}

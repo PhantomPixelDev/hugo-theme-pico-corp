@@ -1,0 +1,54 @@
+{{- /* Engagement models / pricing. cfg: eyebrow, title, lead, tone, note,
+       data (default "pricing"). Each entry:
+       { name, price, unit, text, featured, badge, features [], cta { label, url } } */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "pricing")) -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+
+      <div class="pricing">
+        {{ range . }}
+          {{ $item := . }}
+          <article class="pricing-card{{ if $item.featured }} pricing-card--featured{{ end }}">
+            <div class="pricing-card__head">
+              <h3 class="pricing-card__name">{{ $item.name }}</h3>
+              {{ with $item.badge }}<span class="badge badge--accent">{{ . }}</span>{{ end }}
+            </div>
+
+            {{ with $item.price }}
+              <p class="pricing-card__price">
+                <span>{{ . }}</span>
+                {{ with $item.unit }}<span class="pricing-card__unit">{{ . }}</span>{{ end }}
+              </p>
+            {{ end }}
+
+            {{ with $item.text }}<p class="pricing-card__text">{{ . }}</p>{{ end }}
+
+            {{ with $item.features }}
+              <ul class="pricing-card__list">
+                {{ range . }}<li>{{ . }}</li>{{ end }}
+              </ul>
+            {{ end }}
+
+            {{ with $item.cta }}
+              <div class="pricing-card__footer">
+                <a class="button {{ if $item.featured }}button--primary{{ else }}button--secondary{{ end }}"
+                  href="{{ .url }}">{{ .label }}</a>
+              </div>
+            {{ end }}
+          </article>
+        {{ end }}
+      </div>
+
+      {{ with $cfg.note }}
+        <p class="section-footer muted"><small>{{ . | markdownify }}</small></p>
+      {{ end }}
+    </div>
+  </section>
+{{- end -}}

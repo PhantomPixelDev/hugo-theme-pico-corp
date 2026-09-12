@@ -1,0 +1,94 @@
+# All user-facing strings in the theme. Copy this file to i18n/<lang>.toml in
+# your project to translate or reword anything.
+
+# --- Chrome ---------------------------------------------------------------
+skipToContent = "Skip to content"
+home = "Home"
+menu = "Menu"
+primaryNavigation = "Primary"
+mobileNavigation = "Site"
+switchToDark = "Switch to dark mode"
+switchToLight = "Switch to light mode"
+learnMore = "Learn more"
+startProject = "Start a project"
+links = "Links"
+getInTouch = "Get in touch"
+allRightsReserved = "All rights reserved."
+
+# --- Contact details ------------------------------------------------------
+email = "Email"
+phone = "Phone"
+studio = "Studio"
+openingHours = "Hours"
+vatId = "VAT ID"
+contactDetails = "Contact details"
+openInMaps = "Open in maps"
+
+# --- Navigation aids ------------------------------------------------------
+breadcrumb = "Breadcrumb"
+pagination = "Pagination"
+previousPage = "Previous page"
+nextPage = "Next page"
+page = "Page"
+onThisPage = "On this page"
+filterByCategory = "Filter by category"
+allPosts = "All posts"
+allTerms = "All categories"
+nothingHere = "Nothing published here yet."
+
+# Plural forms use inline tables so the rest of the file stays flat: any key
+# after a [table] header would otherwise belong to that table.
+postCount = { one = "{{ . }} article", other = "{{ . }} articles" }
+readingTime = { one = "{{ . }} min read", other = "{{ . }} min read" }
+
+# --- Services -------------------------------------------------------------
+whatYouGet = "What you get"
+howWeWork = "How we work"
+deliverables = "Deliverables"
+engagement = "Engagement"
+typicalTimeline = "Typical timeline"
+toolsWeUse = "Tools we use"
+otherServices = "Other services"
+
+# --- Case studies ---------------------------------------------------------
+client = "Client"
+industry = "Industry"
+discipline = "Discipline"
+year = "Year"
+duration = "Duration"
+challenge = "The challenge"
+solution = "What we did"
+results = "Results"
+impact = "Impact"
+technologies = "Technologies"
+servicesUsed = "Services"
+clientWords = "In their words"
+gallery = "Gallery"
+caseStudies = "Case studies"
+relatedWork = "Related work"
+relatedProjects = "More case studies"
+
+# --- Journal --------------------------------------------------------------
+author = "Author"
+byAuthor = "by"
+tags = "Tags"
+relatedArticles = "Related reading"
+
+# --- Contact form ---------------------------------------------------------
+demoFormTitle = "This form is not connected yet."
+demoFormText = "Set params.contactForm.action to a Formspree, Netlify Forms or custom endpoint to enable it. In the meantime, write to"
+leaveEmpty = "Leave this field empty"
+formName = "Name"
+formEmail = "Email"
+formCompany = "Company"
+formBudget = "Budget range"
+formChoose = "Select an option"
+formMessage = "What are you working on?"
+formMessageHint = "A few sentences about the problem, the timeline and who is involved is plenty."
+formConsent = "I agree that my details may be stored so the team can reply to this enquiry."
+formSubmit = "Send enquiry"
+
+# --- 404 ------------------------------------------------------------------
+notFoundTitle = "That page has moved on"
+notFoundText = "The link is broken or the page was renamed. These are the places people usually want."
+backHome = "Back to the home page"

@@ -1,0 +1,18 @@
+# Hugo build output and caches
+/public/
+/resources/
+/exampleSite/public/
+/exampleSite/resources/
+/.hugo_build.lock
+/exampleSite/.hugo_build.lock
+hugo_stats.json
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local editor/preview config
+.claude/

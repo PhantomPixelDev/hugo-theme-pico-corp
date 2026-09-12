@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="{{ or site.Language.Locale "en" }}" dir="{{ or site.Language.Direction "ltr" }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    {{ partial "head/scheme.html" . }}
+    {{ partial "head/seo.html" . }}
+    {{ partial "head/favicon.html" . }}
+    {{ partial "head/css.html" . }}
+    {{ partial "head/schema.html" . }}
+    {{ partial "head/analytics.html" . }}
+  </head>
+  <body class="site-shell">
+    <a class="skip-link" href="#main">{{ i18n "skipToContent" }}</a>
+
+    {{ partial "announcement.html" . }}
+    {{ partial "header.html" . }}
+
+    <main class="site-main" id="main">
+      {{ block "main" . }}{{ end }}
+    </main>
+
+    {{ partial "footer.html" . }}
+    {{ partialCached "utils/icon-sprite.html" . }}
+    {{ partial "foot/js.html" . }}
+  </body>
+</html>

@@ -1,0 +1,219 @@
+/* ==========================================================================
+   Tokens
+   The single source of truth for the design system. Everything else in the
+   theme reads from these custom properties, including the Pico overrides so
+   that Pico's own components inherit the same scale.
+   ========================================================================== */
+
+:root {
+  /* Spacing — a 4px base with a deliberately coarse upper end so that
+     section rhythm stays generous on large screens. */
+  --pc-space-3xs: 0.25rem;
+  --pc-space-2xs: 0.5rem;
+  --pc-space-xs: 0.75rem;
+  --pc-space-sm: 1rem;
+  --pc-space-md: 1.5rem;
+  --pc-space-lg: 2rem;
+  --pc-space-xl: 3rem;
+  --pc-space-2xl: 4rem;
+  --pc-space-3xl: 6rem;
+  --pc-space-4xl: 8rem;
+
+  /* Vertical rhythm for full-width sections, fluid between mobile and desktop. */
+  --pc-section-padding: clamp(3.5rem, 7vw, 7rem);
+  --pc-section-padding-sm: clamp(2.5rem, 4.5vw, 4rem);
+
+  /* Containers */
+  --pc-container: 72rem;
+  --pc-container-wide: 84rem;
+  --pc-container-narrow: 46rem;
+  --pc-container-prose: 36em;
+  --pc-gutter: clamp(1.25rem, 4vw, 2.5rem);
+
+  /* Type scale — fluid, restrained, no oversized display sizes. */
+  --pc-text-2xs: 0.8125rem;
+  --pc-text-xs: 0.875rem;
+  --pc-text-sm: 0.9375rem;
+  --pc-text-base: 1.0625rem;
+  --pc-text-card: 1rem;
+  --pc-text-md: clamp(1.125rem, 0.3vw + 1.05rem, 1.1875rem);
+  --pc-text-lg: clamp(1.25rem, 0.6vw + 1.1rem, 1.5rem);
+  --pc-text-xl: clamp(1.5rem, 1vw + 1.2rem, 1.9375rem);
+  --pc-text-2xl: clamp(1.9375rem, 1.8vw + 1.35rem, 2.625rem);
+  --pc-text-3xl: clamp(2.375rem, 3vw + 1.45rem, 3.625rem);
+  --pc-text-4xl: clamp(2.625rem, 4vw + 1.55rem, 4.25rem);
+
+  --pc-leading-tight: 1.1;
+  --pc-leading-snug: 1.3;
+  --pc-leading-normal: 1.65;
+  --pc-leading-relaxed: 1.78;
+  --pc-leading-loose: 1.84;
+
+  /* Serif display type needs far less negative tracking than sans. */
+  --pc-tracking-tight: -0.014em;
+  --pc-tracking-snug: -0.008em;
+  /* Monospace uppercase needs far less tracking than a sans would: the
+     letterforms are already evenly spaced, and too much of it dissolves the
+     word shapes that make a label readable at 14px. */
+  --pc-tracking-wide: 0.05em;
+  --pc-label-word-spacing: 0.12em;
+  --pc-label-weight: 500;
+
+  --pc-weight-normal: 400;
+  --pc-weight-medium: 500;
+  --pc-weight-semibold: 600;
+  --pc-weight-display: 500;
+
+  /* Radii */
+  --pc-radius-sm: calc(var(--pc-radius) * 0.5);
+  --pc-radius: 0.5rem;
+  --pc-radius-lg: calc(var(--pc-radius) * 1.5);
+  --pc-radius-pill: 999px;
+
+  /* Borders — hairlines only. Weight comes from spacing, not from rules. */
+  --pc-border-width: 1px;
+  --pc-border: var(--pc-border-width) solid var(--pc-border-color);
+
+  /* Motion */
+  --pc-ease: cubic-bezier(0.22, 0.61, 0.24, 1);
+  --pc-duration-fast: 120ms;
+  --pc-duration: 220ms;
+  --pc-transition: var(--pc-duration) var(--pc-ease);
+
+  /* Light palette. Near-black text on paper white, one accent, grey scale
+     tuned so that muted text still clears 4.5:1 on the page background. */
+  --pc-bg: #fbfaf7;
+  --pc-bg-muted: #f4f2ed;
+  --pc-bg-sunken: #ece9e2;
+  --pc-bg-inverse: #14161a;
+  --pc-surface: #ffffff;
+  --pc-surface-raised: #ffffff;
+  --pc-text: #15181c;
+  --pc-text-soft: #3d444c;
+  --pc-text-muted: #565d66;
+  --pc-text-inverse: #f7f5f1;
+  --pc-text-inverse-muted: #b3b8bf;
+  --pc-border-color: #e4e0d8;
+  --pc-border-strong: #c9c4b9;
+
+  --pc-shadow-sm: 0 1px 2px rgb(16 20 23 / 4%), 0 1px 3px rgb(16 20 23 / 4%);
+  --pc-shadow: 0 2px 4px rgb(16 20 23 / 4%), 0 8px 24px rgb(16 20 23 / 6%);
+  --pc-shadow-lg: 0 4px 8px rgb(16 20 23 / 5%), 0 20px 48px rgb(16 20 23 / 9%);
+
+  --pc-focus-ring: 0 0 0 3px var(--pc-focus-color);
+  --pc-focus-color: color-mix(in srgb, var(--pc-accent) 40%, transparent);
+
+  /* Syntax highlighting */
+  --pc-code-comment: #6a737d;
+  --pc-code-keyword: #a42d78;
+  --pc-code-string: #0a6e4a;
+  --pc-code-number: #a4552d;
+  --pc-code-name: #1f4e9c;
+
+  /* ---- Pico overrides -------------------------------------------------- */
+  /* No webfont requests: the display face is whichever high-quality serif the
+     operating system already has, which is also what makes the theme look
+     unlike the usual sans-only template. Set params.headingFont = "sans" to
+     opt out. */
+  --pc-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", Arial, sans-serif;
+  --pc-font-serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Book Antiqua",
+    "Source Serif 4", Cambria, Georgia, ui-serif, serif;
+  --pc-font-mono: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
+  --pc-font-display: var(--pc-font-serif);
+
+  --pico-font-family-sans-serif: var(--pc-font-sans);
+  --pico-font-family-monospace: ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
+  --pico-font-family: var(--pico-font-family-sans-serif);
+  --pico-font-size: 100%;
+  --pico-line-height: var(--pc-leading-normal);
+  --pico-border-radius: var(--pc-radius);
+  --pico-spacing: var(--pc-space-sm);
+  --pico-typography-spacing-vertical: var(--pc-space-md);
+  --pico-block-spacing-vertical: var(--pc-space-lg);
+  --pico-block-spacing-horizontal: var(--pc-space-md);
+  --pico-form-element-spacing-vertical: 0.7rem;
+  --pico-form-element-spacing-horizontal: 0.9rem;
+  --pico-transition: var(--pc-transition);
+  --pico-outline-width: 3px;
+
+  --pico-background-color: var(--pc-bg);
+  --pico-color: var(--pc-text);
+  --pico-h1-color: var(--pc-text);
+  --pico-h2-color: var(--pc-text);
+  --pico-h3-color: var(--pc-text);
+  --pico-h4-color: var(--pc-text);
+  --pico-h5-color: var(--pc-text);
+  --pico-h6-color: var(--pc-text);
+  --pico-muted-color: var(--pc-text-muted);
+  --pico-muted-border-color: var(--pc-border-color);
+  --pico-card-background-color: var(--pc-surface);
+  --pico-card-border-color: var(--pc-border-color);
+  --pico-card-sectioning-background-color: var(--pc-bg-muted);
+  --pico-code-background-color: var(--pc-bg-muted);
+  --pico-code-color: var(--pc-text);
+  --pico-blockquote-border-color: var(--pc-border-strong);
+  --pico-form-element-background-color: var(--pc-bg);
+  --pico-form-element-border-color: var(--pc-border-strong);
+  --pico-form-element-placeholder-color: var(--pc-text-muted);
+  --pico-mark-background-color: color-mix(in srgb, var(--pc-accent) 16%, transparent);
+  --pico-mark-color: var(--pc-text);
+}
+
+/* Dark palette. Mirrors Pico's own selectors so the automatic system
+   preference and the explicit toggle behave identically. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pc-bg: #0d1012;
+    --pc-bg-muted: #14181b;
+    --pc-bg-sunken: #1a1f23;
+    --pc-bg-inverse: #f7f5f1;
+    --pc-surface: #13171a;
+    --pc-surface-raised: #181d21;
+    --pc-text: #eceae6;
+    --pc-text-soft: #c6cbd2;
+    --pc-text-muted: #a4aab2;
+    --pc-text-inverse: #15181c;
+    --pc-text-inverse-muted: #4d565f;
+    --pc-border-color: #262c31;
+    --pc-border-strong: #3b444c;
+
+    --pc-shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+    --pc-shadow: 0 2px 4px rgb(0 0 0 / 32%), 0 10px 28px rgb(0 0 0 / 40%);
+    --pc-shadow-lg: 0 4px 10px rgb(0 0 0 / 36%), 0 24px 56px rgb(0 0 0 / 48%);
+
+    --pc-code-comment: #8b949e;
+    --pc-code-keyword: #e69ac8;
+    --pc-code-string: #7ddba9;
+    --pc-code-number: #f0a878;
+    --pc-code-name: #90c2ff;
+  }
+}
+
+[data-theme="dark"] {
+  --pc-bg: #0d1012;
+  --pc-bg-muted: #14181b;
+  --pc-bg-sunken: #1a1f23;
+  --pc-bg-inverse: #f7f5f1;
+  --pc-surface: #13171a;
+  --pc-surface-raised: #181d21;
+  --pc-text: #eceae6;
+  --pc-text-soft: #c6cbd2;
+  --pc-text-muted: #a4aab2;
+  --pc-text-inverse: #15181c;
+  --pc-text-inverse-muted: #4d565f;
+  --pc-border-color: #262c31;
+  --pc-border-strong: #3b444c;
+
+  --pc-shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+  --pc-shadow: 0 2px 4px rgb(0 0 0 / 32%), 0 10px 28px rgb(0 0 0 / 40%);
+  --pc-shadow-lg: 0 4px 10px rgb(0 0 0 / 36%), 0 24px 56px rgb(0 0 0 / 48%);
+
+  --pc-code-comment: #8b949e;
+  --pc-code-keyword: #e69ac8;
+  --pc-code-string: #7ddba9;
+  --pc-code-number: #f0a878;
+  --pc-code-name: #90c2ff;
+}

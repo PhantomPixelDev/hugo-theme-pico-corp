@@ -1,0 +1,48 @@
+{{- /* Case study card.
+
+  Accepts a work page, or a dict { page, featured, sizes }. Featured cards span
+  two grid columns from the 56rem breakpoint up. */ -}}
+{{- $page := . -}}
+{{- $featured := false -}}
+{{- $level := "h3" -}}
+{{- $sizes := "(min-width: 56rem) 33vw, 100vw" -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = .page -}}
+  {{- $featured = .featured | default false -}}
+  {{- $sizes = .sizes | default $sizes -}}
+  {{- $level = .headingLevel | default "h3" -}}
+{{- end -}}
+
+<article class="project-card{{ if $featured }} project-card--featured{{ end }}">
+  {{ with $page.Params.image }}
+    <div class="project-card__media">
+      {{ partial "utils/image.html" (dict
+        "page" $page
+        "path" .
+        "alt" ($page.Params.imageAlt | default "")
+        "sizes" $sizes) }}
+    </div>
+  {{ end }}
+  <div class="project-card__body">
+    <p class="project-card__meta">
+      {{ with $page.Params.client }}<span>{{ . }}</span>{{ end }}
+      {{ with $page.Params.category }}<span>{{ . }}</span>{{ end }}
+      {{ with $page.Params.year }}<span>{{ . }}</span>{{ end }}
+    </p>
+    {{ if eq $level "h2" }}
+      <h2 class="project-card__title">
+        <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
+      </h2>
+    {{ else }}
+      <h3 class="project-card__title">
+        <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
+      </h3>
+    {{ end }}
+    {{ with or $page.Params.summary $page.Description }}
+      <p class="project-card__text">{{ . }}</p>
+    {{ end }}
+    {{ with $page.Params.headline }}
+      <p class="project-card__result">{{ . }}</p>
+    {{ end }}
+  </div>
+</article>

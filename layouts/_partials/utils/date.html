@@ -1,0 +1,5 @@
+{{- /* One date format for the whole theme. Override with params.dateFormat. */ -}}
+{{- $format := site.Params.dateFormat | default "2 January 2006" -}}
+{{- with . -}}
+  {{- .Format $format -}}
+{{- end -}}

@@ -1,0 +1,23 @@
+{{- /* Breadcrumbs for any page below the home page. Disable site-wide with
+       params.showBreadcrumbs = false, or per page with breadcrumbs = false. */ -}}
+{{- if and (site.Params.showBreadcrumbs | default true) (ne .Params.breadcrumbs false) -}}
+  {{- $trail := partial "utils/breadcrumb-trail.html" . -}}
+  {{- if gt (len $trail) 1 -}}
+    <nav class="breadcrumbs" aria-label="{{ i18n "breadcrumb" }}">
+      <ol>
+        <li><a href="{{ site.Home.RelPermalink }}">{{ i18n "home" }}</a></li>
+        {{ range $i, $crumb := $trail }}
+          {{ if gt $i 0 }}
+            <li>
+              {{ if eq (add $i 1) (len $trail) }}
+                <span aria-current="page">{{ $crumb.title }}</span>
+              {{ else }}
+                <a href="{{ $crumb.url }}">{{ $crumb.title }}</a>
+              {{ end }}
+            </li>
+          {{ end }}
+        {{ end }}
+      </ol>
+    </nav>
+  {{- end -}}
+{{- end -}}

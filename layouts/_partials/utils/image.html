@@ -1,0 +1,68 @@
+{{- /*
+  The single image path in the theme.
+
+  Accepts a dict with:
+    page      (optional) — page for bundle resource lookup
+    path                 — image reference (page resource, assets path, or URL)
+    alt                  — alternative text; pass "" for decorative images
+    class     (optional) — class attribute on the <img>
+    sizes     (optional) — sizes attribute, defaults to 100vw
+    widths    (optional) — slice of candidate widths
+    priority  (optional) — true for the LCP image: eager, high fetch priority
+
+  Emits a <picture> with a WebP source and an original-format fallback, both
+  with a srcset, plus intrinsic width and height so nothing shifts on load.
+*/ -}}
+
+{{- $page := .page -}}
+{{- $path := .path -}}
+{{- $alt := .alt | default "" -}}
+{{- $class := .class -}}
+{{- $sizes := .sizes | default "100vw" -}}
+{{- $priority := .priority | default false -}}
+{{- $widths := .widths | default (slice 480 768 1200 1600) -}}
+{{- $loading := cond $priority "eager" "lazy" -}}
+
+{{- $img := partial "utils/resolve-image.html" (dict "page" $page "path" $path) -}}
+
+{{- if and $img (ne $img.MediaType.SubType "svg") -}}
+  {{- $candidates := slice -}}
+  {{- range $widths -}}
+    {{- if le . $img.Width -}}
+      {{- $candidates = $candidates | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if not $candidates -}}
+    {{- $candidates = slice $img.Width -}}
+  {{- end -}}
+
+  {{- $base := $img.Resize (printf "%dx" (index (last 1 $candidates) 0)) -}}
+  {{- $webp := slice -}}
+  {{- $fallback := slice -}}
+  {{- range $candidates -}}
+    {{- $w := . -}}
+    {{- $webp = $webp | append (printf "%s %dw" ($img.Resize (printf "%dx webp q80" $w)).RelPermalink $w) -}}
+    {{- $fallback = $fallback | append (printf "%s %dw" ($img.Resize (printf "%dx" $w)).RelPermalink $w) -}}
+  {{- end -}}
+  <picture>
+    <source type="image/webp" srcset="{{ delimit $webp ", " }}" sizes="{{ $sizes }}" />
+    <img
+      src="{{ $base.RelPermalink }}"
+      srcset="{{ delimit $fallback ", " }}"
+      sizes="{{ $sizes }}"
+      width="{{ $base.Width }}"
+      height="{{ $base.Height }}"
+      alt="{{ $alt }}"
+      loading="{{ $loading }}"
+      decoding="{{ cond $priority "sync" "async" }}"
+      {{ with $class }}class="{{ . }}"{{ end }}
+      {{ if $priority }}fetchpriority="high"{{ end }} />
+  </picture>
+{{- else if $img -}}
+  <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="{{ $loading }}"
+    {{ with $class }}class="{{ . }}"{{ end }} />
+{{- else if $path -}}
+  {{- /* Remote or static path: emit as given so authors can still use a CDN. */ -}}
+  <img src="{{ $path }}" alt="{{ $alt }}" loading="{{ $loading }}"
+    {{ with $class }}class="{{ . }}"{{ end }} />
+{{- end -}}

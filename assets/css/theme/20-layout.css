@@ -1,0 +1,342 @@
+/* ==========================================================================
+   Layout
+   Containers, section rhythm and the small set of grids every page reuses.
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--pc-container);
+  margin-inline: auto;
+  padding-inline: var(--pc-gutter);
+}
+
+.container--wide {
+  max-width: var(--pc-container-wide);
+}
+
+.container--narrow {
+  max-width: var(--pc-container-narrow);
+}
+
+/* ---- Pico nav reset ----------------------------------------------------
+   Pico treats every bare <nav> as horizontal navigation: `nav, nav ul` become
+   flex containers, `nav li` is inline-block with padding, and `nav li > a`
+   gets negative margins. This theme lays out each navigation itself — header,
+   mobile panel, breadcrumbs, filters, pagination — so those defaults are
+   switched off once, here.
+
+   The selectors deliberately avoid :where(). It contributes no specificity, so
+   `nav :where(ul, ol)` scores lower than Pico's `nav ul` and loses; these
+   match it exactly and win on source order instead.
+   ---------------------------------------------------------------------- */
+
+nav {
+  display: block;
+  justify-content: normal;
+}
+
+nav ul,
+nav ol {
+  display: block;
+  align-items: normal;
+  margin-inline: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav ul > li,
+nav ol > li {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul > li > a,
+nav ol > li > a,
+nav ul > li > button,
+nav ol > li > button {
+  margin: 0;
+}
+
+/* ---- Sections ---------------------------------------------------------- */
+
+.section {
+  padding-block: var(--pc-section-padding);
+}
+
+.section--tight {
+  padding-block: var(--pc-section-padding-sm);
+}
+
+.section--muted {
+  background-color: var(--pc-bg-muted);
+}
+
+.section--inverse {
+  background-color: var(--pc-bg-inverse);
+  color: var(--pc-text-inverse);
+}
+
+.section--inverse :where(h1, h2, h3, h4, p, li) {
+  color: inherit;
+}
+
+.section--inverse .section-head__lead,
+.section--inverse .muted {
+  color: var(--pc-text-inverse-muted);
+}
+
+/* A hairline between stacked sections of the same tone keeps the page from
+   reading as one undifferentiated column. */
+.section + .section:not(.section--muted):not(.section--inverse) {
+  border-block-start: var(--pc-border);
+}
+
+.section--muted + .section--muted {
+  padding-block-start: 0;
+}
+
+/* ---- Section heading block --------------------------------------------- */
+
+.section-head {
+  max-width: var(--pc-container-narrow);
+  margin-block-end: var(--pc-space-xl);
+}
+
+.section-head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-head__title {
+  margin-block-end: var(--pc-space-xs);
+}
+
+.section-head__lead {
+  color: var(--pc-text-soft);
+  font-size: var(--pc-text-md);
+  line-height: var(--pc-leading-relaxed);
+  margin-block-end: 0;
+  max-width: 56ch;
+}
+
+.section-head--center .section-head__lead {
+  margin-inline: auto;
+}
+
+/* Trailing link or button row under a section body. */
+.section-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pc-space-sm) var(--pc-space-md);
+  margin-block-start: var(--pc-space-lg);
+  margin-block-end: 0;
+}
+
+/* A label, not a highlight. The accent colour stays on things that can be
+   clicked or that carry a number. */
+.eyebrow {
+  display: block;
+  font-size: var(--pc-text-xs);
+  font-weight: var(--pc-weight-semibold);
+  letter-spacing: var(--pc-tracking-wide);
+  text-transform: uppercase;
+  color: var(--pc-text-muted);
+  margin-block-end: var(--pc-space-xs);
+}
+
+.section--inverse .eyebrow {
+  color: var(--pc-text-inverse-muted);
+}
+
+/* ---- Grids -------------------------------------------------------------
+   Auto-fit grids with a named minimum so cards reflow without media queries.
+   ---------------------------------------------------------------------- */
+
+.grid-auto {
+  --pc-grid-min: 17rem;
+  display: grid;
+  gap: var(--pc-space-md);
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--pc-grid-min), 100%), 1fr));
+}
+
+.grid-auto--wide {
+  --pc-grid-min: 22rem;
+}
+
+.grid-auto--narrow {
+  --pc-grid-min: 13rem;
+}
+
+.grid-auto--gap-lg {
+  gap: var(--pc-space-lg);
+}
+
+/* Two column split used for about blocks, service intros and contact. */
+.split {
+  display: grid;
+  gap: var(--pc-space-xl);
+  align-items: start;
+}
+
+@media (min-width: 62rem) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--pc-space-2xl);
+  }
+
+  .split--aside {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  }
+
+  .split--sticky > :last-child {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+/* ---- Prose ------------------------------------------------------------- */
+
+.prose {
+  max-width: var(--pc-container-prose);
+  font-size: var(--pc-text-md);
+  line-height: var(--pc-leading-loose);
+}
+
+/* Long-form pages: the opening paragraph is set larger and takes a drop cap
+   in the display face. Applied through a class, so a short intro paragraph is
+   never forced into it. */
+.prose--lede > p:first-of-type {
+  font-size: 1.08em;
+  color: var(--pc-text);
+}
+
+.prose--lede > p:first-of-type::first-letter {
+  float: inline-start;
+  margin-inline-end: 0.07em;
+  padding-block-start: 0.04em;
+  font-family: var(--pc-font-display);
+  font-size: clamp(2.8em, 3.4em, 3.6em);
+  font-weight: var(--pc-weight-display);
+  line-height: 0.8;
+  color: var(--pc-text);
+}
+
+.prose--wide {
+  max-width: 52rem;
+}
+
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
+.prose > :last-child {
+  margin-block-end: 0;
+}
+
+.prose :where(h2, h3, h4) {
+  margin-block-start: var(--pc-space-xl);
+}
+
+.prose :where(h2) + :where(h3) {
+  margin-block-start: var(--pc-space-md);
+}
+
+.prose :where(ul, ol) {
+  padding-inline-start: 1.25rem;
+}
+
+.prose :where(li) {
+  line-height: var(--pc-leading-relaxed);
+}
+
+.prose li + li {
+  margin-block-start: var(--pc-space-2xs);
+}
+
+/* An asterism instead of a rule between passages. */
+.prose hr {
+  height: auto;
+  border: 0;
+  margin-block: var(--pc-space-xl);
+  text-align: center;
+  line-height: 1;
+}
+
+.prose hr::before {
+  content: "· · ·";
+  letter-spacing: 0.6em;
+  font-size: var(--pc-text-lg);
+  color: var(--pc-border-strong);
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding-inline-start: var(--pc-space-md);
+  border-inline-start: 3px solid var(--pc-accent);
+  font-size: var(--pc-text-lg);
+  line-height: var(--pc-leading-snug);
+  letter-spacing: var(--pc-tracking-snug);
+}
+
+.prose figure {
+  margin-block: var(--pc-space-lg);
+}
+
+.prose figcaption {
+  margin-block-start: var(--pc-space-2xs);
+  font-size: var(--pc-text-sm);
+  color: var(--pc-text-muted);
+}
+
+/* Pico applies `list-style: square` to every `ul li`. That selector carries
+   more specificity than `list-style: none` on the list itself, so component
+   lists opt out at item level, here, in one place. */
+.logo-wall > li,
+.stats > li,
+.site-nav__list > li,
+.mobile-nav__list > li,
+.site-footer__list > li,
+.site-footer__legal > li,
+.social-links > li,
+.tag-list > li,
+.pagination__list > li,
+.process > li,
+.timeline > li,
+.values > li,
+.gallery > li,
+.deliverables > li,
+.benefit-list > li,
+.case-results > li,
+.pricing-card__list > li,
+.service-card__list > li,
+.breadcrumbs ol > li,
+.toc ul > li {
+  list-style: none;
+}
+
+/* ---- Utilities (kept deliberately tiny) ------------------------------- */
+
+.muted {
+  color: var(--pc-text-muted);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.stack > * + * {
+  margin-block-start: var(--pc-space-sm);
+}
+
+.stack-lg > * + * {
+  margin-block-start: var(--pc-space-lg);
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-xs);
+  align-items: center;
+}

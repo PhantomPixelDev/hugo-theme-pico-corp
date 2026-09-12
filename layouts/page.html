@@ -1,0 +1,15 @@
+{{ define "main" }}
+  {{ partial "page-header.html" . }}
+
+  {{ if .Params.sections }}
+    {{ partial "utils/sections.html" . }}
+  {{ else if .Content }}
+    <section class="section">
+      <div class="container">
+        <div class="prose">{{ .Content }}</div>
+      </div>
+    </section>
+  {{ end }}
+
+  {{ partial "cta.html" . }}
+{{ end }}

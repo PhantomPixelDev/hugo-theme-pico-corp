@@ -1,0 +1,26 @@
+{{- /* Values grid. cfg: eyebrow, title, lead, tone, data (default "values").
+       Each entry: { title, text, icon } */ -}}
+{{- $cfg := .cfg -}}
+{{- $items := $cfg.items | default (index hugo.Data ($cfg.data | default "values")) -}}
+{{- with $items -}}
+  <section class="{{ partial "utils/section-class.html" $cfg }}">
+    <div class="container">
+      {{ partial "utils/section-head.html" (dict
+        "eyebrow" $cfg.eyebrow
+        "title" $cfg.title
+        "lead" $cfg.lead
+        "center" $cfg.center) }}
+      <ul class="values">
+        {{ range . }}
+          <li>
+            <h3 class="values__title">
+              {{ with .icon }}{{ partial "utils/icon.html" . }}{{ end }}
+              <span>{{ .title }}</span>
+            </h3>
+            <p class="values__text">{{ .text }}</p>
+          </li>
+        {{ end }}
+      </ul>
+    </div>
+  </section>
+{{- end -}}

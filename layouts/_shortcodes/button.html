@@ -1,0 +1,5 @@
+{{- /* {{< button url="/contact/" label="Book a call" variant="primary" >}} */ -}}
+{{- $variant := .Get "variant" | default "primary" -}}
+{{- $url := .Get "url" | default "#" -}}
+{{- $label := .Get "label" | default (.Inner | plainify) -}}
+<a class="button button--{{ $variant }}" href="{{ $url }}">{{ $label }}</a>

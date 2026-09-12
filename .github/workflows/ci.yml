@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # Deliberately the standard build, not the extended one. The theme ships
+  # plain CSS on top of a vendored Pico, and this is what proves it never
+  # needs a Sass toolchain.
+  HUGO_VERSION: 0.161.1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: false
+
+      - name: Build the demo site, failing on any warning
+        run: |
+          set -o pipefail
+          hugo --source exampleSite --themesDir ../.. --minify --gc 2>&1 | tee build.log
+          if grep -q "^WARN" build.log; then
+            echo "::error::Hugo emitted warnings"
+            grep "^WARN" build.log
+            exit 1
+          fi
+
+      - name: Check every internal link resolves
+        run: |
+          python3 - <<'PY'
+          import os, re, html, sys
+          root = "exampleSite/public"
+          pages = [os.path.join(d, f) for d, _, fs in os.walk(root) for f in fs if f.endswith(".html")]
+          href = re.compile(r'href=(?:"([^"]+)"|([^ >]+))')
+          broken, checked = {}, 0
+          for p in pages:
+              for m in href.finditer(open(p, encoding="utf-8").read()):
+                  u = html.unescape(m.group(1) or m.group(2))
+                  if u.startswith(("http", "mailto:", "tel:", "#", "data:")) or not u.startswith("/"):
+                      continue
+                  u = u.split("#")[0].split("?")[0]
+                  checked += 1
+                  t = os.path.join(root, u.lstrip("/"))
+                  if not (os.path.isfile(t) or os.path.isfile(os.path.join(t, "index.html"))):
+                      broken.setdefault(u, set()).add(os.path.relpath(p, root))
+          print(f"{len(pages)} pages, {checked} internal links")
+          for u, src in sorted(broken.items()):
+              print(f"::error::broken link {u} on {sorted(src)[0]}")
+          sys.exit(1 if broken else 0)
+          PY
+
+      - name: Check the structured data parses
+        run: |
+          python3 - <<'PY'
+          import os, re, json, sys
+          root = "exampleSite/public"
+          bad = 0
+          for d, _, fs in os.walk(root):
+              for f in (f for f in fs if f.endswith(".html")):
+                  p = os.path.join(d, f)
+                  s = open(p, encoding="utf-8").read()
+                  for m in re.finditer(r'<script type=application/ld\+json>(.*?)</script>', s, re.S):
+                      try:
+                          json.loads(m.group(1))
+                      except Exception as e:
+                          bad += 1
+                          print(f"::error file={p}::invalid JSON-LD: {e}")
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Check no page skips a heading level
+        run: |
+          python3 - <<'PY'
+          import os, re, sys
+          root = "exampleSite/public"
+          bad = []
+          for d, _, fs in os.walk(root):
+              for f in (f for f in fs if f.endswith(".html")):
+                  p = os.path.join(d, f)
+                  lv = [int(m.group(1)) for m in re.finditer(r"<h([1-6])[ >]", open(p, encoding="utf-8").read())]
+                  if any(lv[i] - lv[i - 1] > 1 for i in range(1, len(lv))):
+                      bad.append(os.path.relpath(p, root))
+          for p in bad:
+              print(f"::error::skipped heading level on {p}")
+          sys.exit(1 if bad else 0)
+          PY
