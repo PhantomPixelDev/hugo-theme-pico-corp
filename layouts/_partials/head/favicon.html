@@ -2,11 +2,11 @@
        never ships a 404. Paths are resolved against static/ as given. */ -}}
 {{- with site.Params.favicon -}}
   {{- $ext := path.Ext . -}}
-  <link rel="icon" href="{{ . | relURL }}"{{ if eq $ext ".svg" }} type="image/svg+xml"{{ end }} />
+  <link rel="icon" href="{{ partial "utils/static-url.html" . }}"{{ if eq $ext ".svg" }} type="image/svg+xml"{{ end }} />
 {{- end }}
 {{ with site.Params.appleTouchIcon -}}
-  <link rel="apple-touch-icon" href="{{ . | relURL }}" />
+  <link rel="apple-touch-icon" href="{{ partial "utils/static-url.html" . }}" />
 {{- end }}
 {{ with site.Params.manifest -}}
-  <link rel="manifest" href="{{ . | relURL }}" />
+  <link rel="manifest" href="{{ partial "utils/static-url.html" . }}" />
 {{- end }}

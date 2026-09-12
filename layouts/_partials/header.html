@@ -7,7 +7,7 @@
           <img class="brand__logo" src="{{ .RelPermalink }}" alt="{{ site.Params.companyName | default site.Title }}"
             {{ with .Width }}width="{{ . }}"{{ end }}{{ with .Height }} height="{{ . }}"{{ end }} />
         {{- else -}}
-          <img class="brand__logo" src="{{ . | relURL }}" alt="{{ site.Params.companyName | default site.Title }}" />
+          <img class="brand__logo" src="{{ partial "utils/static-url.html" . }}" alt="{{ site.Params.companyName | default site.Title }}" />
         {{- end -}}
       {{- else -}}
         <span class="brand__mark" aria-hidden="true">{{ partial "utils/icon.html" "star" }}</span>

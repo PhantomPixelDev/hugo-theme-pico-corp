@@ -30,8 +30,13 @@ jobs:
           hugo-version: ${{ env.HUGO_VERSION }}
           extended: false
 
+      # enablement turns Pages on for the repository if it is not already, so a
+      # fresh clone or fork does not fail its first deploy with "Get Pages site
+      # failed" before someone visits the settings page.
       - id: pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Build
         run: |

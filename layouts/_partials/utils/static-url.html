@@ -1,0 +1,17 @@
+{{- /*
+  Resolves a configured path that points at a file in static/ to a URL that
+  works under a baseURL with a path, such as a GitHub Pages project site.
+
+  `relURL` prepends the baseURL's path only when the input has no leading
+  slash, so "/favicon.svg" would stay at the domain root and 404. Trimming the
+  slash first makes both spellings behave the same. Absolute URLs pass through
+  untouched, so a CDN path still works.
+
+  Usage: {{ partial "utils/static-url.html" site.Params.favicon }}
+*/ -}}
+{{- $path := . -}}
+{{- $out := $path -}}
+{{- if not (or (hasPrefix $path "http://") (hasPrefix $path "https://") (hasPrefix $path "//")) -}}
+  {{- $out = strings.TrimPrefix "/" $path | relURL -}}
+{{- end -}}
+{{- return $out -}}
