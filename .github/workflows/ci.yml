@@ -29,7 +29,10 @@ jobs:
       - name: Build the demo site, failing on any warning
         run: |
           set -o pipefail
-          hugo --source exampleSite --themesDir ../.. --minify --gc 2>&1 | tee build.log
+          # baseURL "/" keeps every internal link root-relative, which is what
+          # the link checker below resolves against. This output is never
+          # deployed; the Pages workflow builds with the real baseURL.
+          hugo --source exampleSite --themesDir ../.. --minify --gc --baseURL "/" 2>&1 | tee build.log
           if grep -q "^WARN" build.log; then
             echo "::error::Hugo emitted warnings"
             grep "^WARN" build.log
