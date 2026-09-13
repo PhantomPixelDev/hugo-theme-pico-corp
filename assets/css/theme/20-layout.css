@@ -192,7 +192,7 @@ nav ol > li > button {
 
   .split--sticky > :last-child {
     position: sticky;
-    top: 6rem;
+    top: calc(var(--pc-header-height) + var(--pc-space-md));
   }
 }
 

@@ -13,7 +13,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
+  /* Anchored headings have to clear the sticky header. */
+  scroll-padding-top: calc(var(--pc-header-height) + var(--pc-space-md));
 }
 
 body {

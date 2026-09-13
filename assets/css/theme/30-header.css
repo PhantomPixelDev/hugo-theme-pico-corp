@@ -3,6 +3,26 @@
    Announcement bar, header, navigation, mobile panel, footer.
    ========================================================================== */
 
+/* ---- Pico body-child reset --------------------------------------------
+   Pico pads every direct child of body:
+
+     body>footer, body>header, body>main { padding-block: … }
+
+   That inflated the sticky header by 64px, which then overlapped content and
+   left the sticky sidebars offset wrong, and it added the same space above the
+   first section. This theme paints its own rhythm with .section and the chrome
+   components, so the two that have no padding of their own opt out. The footer
+   already wins with its own class rule.
+
+   `body > .x` scores higher than Pico's `body>x`, so these hold regardless of
+   source order.
+   ---------------------------------------------------------------------- */
+
+body > .site-header,
+body > .site-main {
+  padding-block: 0;
+}
+
 /* ---- Announcement bar -------------------------------------------------- */
 
 .announcement {
@@ -44,8 +64,10 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background-color: color-mix(in srgb, var(--pc-bg) 94%, transparent);
-  backdrop-filter: blur(12px);
+  /* Opaque on purpose: a translucent header let body text ghost through it,
+     and the blur that was meant to hide that is not reliable across
+     browsers. The hairline and shadow below do the separating instead. */
+  background-color: var(--pc-bg);
   border-block-end: 1px solid transparent;
   transition: border-color var(--pc-duration) var(--pc-ease),
     box-shadow var(--pc-duration) var(--pc-ease);
@@ -61,7 +83,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--pc-space-md);
-  min-height: 4.25rem;
+  min-height: var(--pc-header-height);
 }
 
 /* ---- Brand ------------------------------------------------------------- */
@@ -259,7 +281,7 @@
   display: none;
   border-block-start: var(--pc-border);
   background-color: var(--pc-bg);
-  max-height: calc(100dvh - 4.25rem);
+  max-height: calc(100dvh - var(--pc-header-height));
   overflow-y: auto;
 }
 

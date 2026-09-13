@@ -23,6 +23,10 @@
   --pc-section-padding: clamp(3.5rem, 7vw, 7rem);
   --pc-section-padding-sm: clamp(2.5rem, 4.5vw, 4rem);
 
+  /* Chrome. The header height is a token because sticky offsets and
+     scroll-padding have to agree with it. */
+  --pc-header-height: 4.25rem;
+
   /* Containers */
   --pc-container: 72rem;
   --pc-container-wide: 84rem;
